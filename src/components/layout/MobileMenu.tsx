@@ -78,7 +78,9 @@ export function MobileMenu({ open, onClose, links, currentPath }: MobileMenuProp
         className="absolute inset-x-0 top-0 rounded-b-card border-b border-line bg-surface p-5 shadow-lg"
       >
         <div className="flex items-center justify-between">
-          <span className="font-serif text-xl">Alma e Imagen</span>
+          <span className="font-script text-[1.8rem] leading-none text-brand-deep">
+            Alma e Imagen
+          </span>
           <button
             ref={closeRef}
             type="button"

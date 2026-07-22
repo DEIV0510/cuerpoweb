@@ -43,9 +43,22 @@ El resultado es una **orientación de imagen y vestuario**, no una evaluación m
 | Lucide React | Iconografía |
 | Vitest | Pruebas unitarias del algoritmo y del esquema |
 | ESLint (`eslint-config-next`) | Calidad de código |
-| `next/font` | Cormorant Garamond (títulos) e Inter (texto) |
+| `next/font` | Cormorant Garamond (títulos), Montserrat (texto) y Sacramento (wordmark) |
 
 No se usan bases de datos, APIs externas, claves ni variables de entorno.
+
+### Identidad visual
+
+La aplicación usa la **misma ambientación de la marca Alma e Imagen**: fondo blush
+`#FFF6FA`, rosa fucsia `#D6207E` con degradado `#D6207E → #B5179E → #7E125A`, texto
+en ciruela profundo `#2A1622`, botones píldora con sombra *glow*, tarjetas de
+esquinas amplias y el wordmark «Alma e Imagen» en Sacramento.
+
+Los tokens viven en `src/app/globals.css` dentro del bloque `@theme`, así que
+cambiar la paleta completa es cuestión de editar ese archivo.
+
+> Se comparte únicamente el **lenguaje visual**. No hay código, dependencias,
+> repositorio ni datos compartidos con la plataforma de la academia.
 
 ---
 

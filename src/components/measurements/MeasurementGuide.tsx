@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react';
+﻿import { Check } from 'lucide-react';
 import { MeasurementIllustration } from '@/components/measurements/MeasurementIllustration';
 import { GENERAL_TIPS, ZONE_GUIDES } from '@/data/measurement-guide';
 import { cn } from '@/lib/utils';
@@ -39,7 +39,7 @@ export function MeasurementGuide({ compact = false, className }: MeasurementGuid
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <span className="text-xs font-semibold uppercase tracking-[0.16em] text-brand">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.34em] text-brand-dark">
                   Medida {index + 1}
                 </span>
                 <h3 id={`guia-${zone.id}`} className="mt-1 text-xl">

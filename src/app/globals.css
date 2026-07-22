@@ -2,24 +2,48 @@
 
 /* ------------------------------------------------------------------
    Sistema de diseño · Alma e Imagen
+   Misma ambientación visual que la academia de Leidy Sepúlveda:
+   rosa fucsia sobre blush, tipografías Cormorant + Montserrat y el
+   wordmark en Sacramento. Este proyecto es independiente: solo se
+   comparte el lenguaje visual, ningún código ni dato.
    ------------------------------------------------------------------ */
 @theme {
-  --color-shell: #f8f5f1;
+  /* Fondos */
+  --color-shell: #fff6fa; /* blush 50  */
   --color-surface: #ffffff;
-  --color-ink: #24211f;
-  --color-muted: #68615d;
-  --color-brand: #8b4e5d;
-  --color-brand-dark: #693744;
-  --color-brand-soft: #e8d4d7;
-  --color-sand: #d9c1ae;
-  --color-line: #e5ddd7;
-  --color-success: #506b5a;
+  --color-blush: #ffe9f3; /* blush 100 */
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  /* Texto */
+  --color-ink: #2a1622; /* ciruela profundo */
+  --color-muted: #5c4150; /* ink soft         */
+  --color-faint: #8a7280; /* ink muted        */
+
+  /* Marca */
+  --color-brand-light: #ed2a8c; /* brand 500 */
+  --color-brand: #d6207e; /* brand 600 */
+  --color-brand-dark: #ae1565; /* brand 700 */
+  --color-brand-deep: #860f4d; /* brand 800 */
+  --color-brand-soft: #ffe1f0; /* brand 100 */
+  --color-plum: #b5179e;
+  --color-mocha: #7e125a;
+
+  /* Neutros rosados */
+  --color-sand: #f7c2da;
+  --color-sand-strong: #efa6c8;
+  --color-line: #fdd7e9;
+  --color-success: #b5179e;
+
+  /* Tipografías */
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-serif: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  --font-script: var(--font-sacramento), 'Sacramento', cursive;
 
-  --radius-card: 1.25rem;
+  /* Formas y sombras */
+  --radius-card: 1.75rem;
   --radius-pill: 999px;
+  --shadow-soft: 0 10px 40px -14px rgba(190, 30, 110, 0.18);
+  --shadow-glow: 0 20px 55px -20px rgba(237, 42, 140, 0.4);
+  --shadow-card: 0 26px 60px -30px rgba(42, 22, 34, 0.2);
 }
 
 @layer base {
@@ -29,6 +53,7 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 88px;
     -webkit-text-size-adjust: 100%;
   }
 
@@ -46,20 +71,20 @@
   h2,
   h3 {
     font-family: var(--font-serif);
-    font-weight: 500;
-    line-height: 1.15;
+    font-weight: 600;
+    line-height: 1.12;
     letter-spacing: -0.01em;
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-brand);
+    outline: 2px solid var(--color-brand-light);
     outline-offset: 3px;
     border-radius: 4px;
   }
 
   ::selection {
-    background-color: var(--color-brand-soft);
-    color: var(--color-brand-dark);
+    background-color: #fec6e1;
+    color: #5e0935;
   }
 
   /* Evita el zoom automático de iOS al enfocar un campo. */
@@ -68,6 +93,39 @@
   textarea {
     font-size: max(1rem, 16px);
   }
+}
+
+/* ------------------------------------------------------------------
+   Utilidades de marca
+   ------------------------------------------------------------------ */
+.bg-brand-gradient {
+  background-image: linear-gradient(125deg, #d6207e 0%, #b5179e 55%, #7e125a 100%);
+}
+
+.bg-rose-gradient {
+  background-image: linear-gradient(90deg, #ed2a8c 0%, #d6207e 100%);
+}
+
+.bg-blush-radial {
+  background-image: radial-gradient(60% 60% at 50% 0%, #ffe1f0 0%, #fff6fa 70%);
+}
+
+.gradient-text {
+  background-image: linear-gradient(90deg, #ed2a8c 0%, #d6207e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hairline {
+  height: 1px;
+  width: 100%;
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--color-sand-strong),
+    transparent
+  );
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -84,11 +142,11 @@
   }
 }
 
-/* Aparición suave de los bloques de resultado. */
+/* Aparición suave de los bloques de contenido. */
 @keyframes alma-fade-up {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
@@ -96,8 +154,22 @@
   }
 }
 
+@keyframes alma-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
 .alma-fade-up {
-  animation: alma-fade-up 0.5s ease-out both;
+  animation: alma-fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.alma-float {
+  animation: alma-float 7s ease-in-out infinite;
 }
 
 /* Barra de desplazamiento discreta para las pestañas móviles. */
@@ -151,7 +223,8 @@
     display: none !important;
   }
 
-  .alma-fade-up {
+  .alma-fade-up,
+  .alma-float {
     animation: none !important;
   }
 

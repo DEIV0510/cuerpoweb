@@ -12,7 +12,7 @@ export function Card({ children, className, as: Tag = 'div' }: CardProps) {
   return (
     <Tag
       className={cn(
-        'rounded-card border border-line bg-surface p-6 sm:p-7',
+        'rounded-card border border-line bg-surface p-6 shadow-card sm:p-7',
         className,
       )}
     >
@@ -31,7 +31,7 @@ export function Eyebrow({ children, className }: EyebrowProps) {
   return (
     <p
       className={cn(
-        'text-xs font-semibold uppercase tracking-[0.18em] text-brand',
+        'text-[11px] font-semibold uppercase tracking-[0.34em] text-brand-dark',
         className,
       )}
     >

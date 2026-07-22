@@ -14,18 +14,29 @@ const HIGHLIGHTS = [
 /** Primera pantalla de la página de inicio. */
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden border-b border-line bg-surface">
-      <div className="mx-auto grid w-full max-w-6xl gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-        <div className="flex flex-col gap-6">
-          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-shell px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-brand">
-            {SITE.brand} · {SITE.product}
-          </p>
+    <section className="bg-blush-radial relative overflow-hidden border-b border-line">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-32 top-16 h-[26rem] w-[26rem] rounded-full bg-sand/50 blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-40 top-56 h-[24rem] w-[24rem] rounded-full bg-brand-soft/60 blur-3xl"
+      />
 
-          <h1 className="text-[2.6rem] leading-[1.08] sm:text-6xl">
-            Descubre las prendas que mejor acompañan tu silueta
+      <div className="relative mx-auto grid w-full max-w-6xl gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
+        <div className="alma-fade-up flex flex-col gap-6">
+          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-sand bg-surface/70 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-dark backdrop-blur">
+            <Sparkles aria-hidden="true" className="h-3.5 w-3.5" />
+            {SITE.brand} · {SITE.product}
+          </span>
+
+          <h1 className="text-[2.6rem] leading-[1.08] sm:text-[3.4rem]">
+            Descubre las prendas que{' '}
+            <span className="gradient-text italic">mejor acompañan</span> tu silueta
           </h1>
 
-          <p className="max-w-xl text-lg text-muted">
+          <p className="max-w-xl text-lg leading-relaxed text-muted">
             Ingresa tres medidas y recibe una guía personalizada de cortes, escotes,
             prendas y detalles que ayudan a crear equilibrio visual y potenciar tu
             estilo.
@@ -54,29 +65,41 @@ export function HeroSection() {
           </ul>
         </div>
 
-        <div className="relative">
-          <div className="rounded-card border border-line bg-shell p-6 sm:p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
-              Cinco siluetas
-            </p>
-            <div className="mt-6 grid grid-cols-5 items-end gap-2 sm:gap-3">
-              {Object.values(BODY_SHAPE_PROFILES).map((profile) => (
-                <figure key={profile.id} className="flex flex-col items-center gap-2">
-                  <SilhouetteIllustration
-                    proportions={profile.illustration}
-                    title={`Silueta ${profile.name}`}
-                    className="max-h-32"
-                  />
-                  <figcaption className="text-center text-[0.65rem] leading-tight text-muted">
-                    {profile.shortName}
-                  </figcaption>
-                </figure>
-              ))}
+        <div className="relative mx-auto w-full max-w-md">
+          <div className="relative overflow-hidden rounded-[2rem] border border-sand bg-gradient-to-br from-blush via-brand-soft to-sand p-7 shadow-card sm:p-8">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 [background:radial-gradient(120%_90%_at_100%_0%,rgba(255,255,255,.65),transparent_45%)]"
+            />
+
+            <div className="relative">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-mocha">
+                Las cinco siluetas
+              </span>
+              <p className="font-script text-[2.8rem] leading-none text-brand-deep">
+                Alma e Imagen
+              </p>
+
+              <div className="mt-7 grid grid-cols-5 items-end gap-2 sm:gap-3">
+                {Object.values(BODY_SHAPE_PROFILES).map((profile) => (
+                  <figure key={profile.id} className="flex flex-col items-center gap-2">
+                    <SilhouetteIllustration
+                      proportions={profile.illustration}
+                      title={`Silueta ${profile.name}`}
+                      className="max-h-32"
+                    />
+                    <figcaption className="text-center text-[0.62rem] leading-tight text-mocha">
+                      {profile.shortName}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+
+              <p className="mt-6 border-t border-white/60 pt-4 text-sm text-muted">
+                Ninguna silueta es mejor que otra: cada una tiene sus propias
+                proporciones y su forma de brillar.
+              </p>
             </div>
-            <p className="mt-6 border-t border-line pt-4 text-sm text-muted">
-              Ninguna silueta es mejor que otra: cada una tiene sus propias
-              proporciones y su forma de brillar.
-            </p>
           </div>
         </div>
       </div>

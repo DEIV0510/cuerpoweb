@@ -17,11 +17,13 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="no-print sticky top-0 z-40 border-b border-line bg-shell/90 backdrop-blur">
+    <header className="no-print sticky top-0 z-40 border-b border-line bg-shell/85 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <Link href="/" className="flex flex-col leading-tight">
-          <span className="font-serif text-xl text-ink sm:text-2xl">{SITE.brand}</span>
-          <span className="text-[0.7rem] uppercase tracking-[0.18em] text-muted">
+        <Link href="/" className="flex flex-col leading-none">
+          <span className="font-script text-[1.85rem] text-brand-deep sm:text-[2.1rem]">
+            {SITE.brand}
+          </span>
+          <span className="mt-0.5 text-[0.62rem] font-semibold uppercase tracking-[0.34em] text-faint">
             {SITE.product}
           </span>
         </Link>

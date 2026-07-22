@@ -84,7 +84,7 @@ export function ResultView() {
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-4 py-10 sm:px-6 sm:py-14">
       <header className="print-only">
-        <p className="font-serif text-2xl">{SITE.brand}</p>
+        <p className="font-script text-3xl">{SITE.brand}</p>
         <p className="text-sm">
           {SITE.product} · Ficha del {formatLongDate(createdAt)}
         </p>

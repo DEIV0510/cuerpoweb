@@ -1,4 +1,4 @@
-import { SilhouetteIllustration } from '@/components/ui/SilhouetteIllustration';
+﻿import { SilhouetteIllustration } from '@/components/ui/SilhouetteIllustration';
 import { getBodyShapeProfile } from '@/data/body-shapes';
 import { formatCm } from '@/lib/body-shape/calculations';
 import { formatLongDate } from '@/lib/utils';
@@ -28,7 +28,7 @@ export function ResultHero({ result, createdAt }: ResultHeroProps) {
         </div>
 
         <div className="flex-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.34em] text-brand-dark">
             Tu silueta predominante es
           </p>
           <h1 id="titulo-resultado" className="mt-2 text-4xl sm:text-5xl">

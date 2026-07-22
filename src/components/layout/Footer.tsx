@@ -10,13 +10,15 @@ export function Footer() {
     <footer className="no-print border-t border-line bg-surface">
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-[1.3fr_1fr]">
         <div className="flex flex-col gap-3">
-          <span className="font-serif text-2xl">{SITE.brand}</span>
+          <span className="font-script text-4xl leading-none text-brand-deep">
+            {SITE.brand}
+          </span>
           <p className="max-w-md text-sm text-muted">{SITE.description}</p>
           <p className="max-w-md text-sm text-muted">{SITE.disclaimer}</p>
         </div>
 
         <nav aria-label="Enlaces del pie de página">
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.34em] text-brand-dark">
             Secciones
           </h2>
           <ul className="mt-4 flex flex-col gap-2">

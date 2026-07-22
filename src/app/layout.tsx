@@ -1,20 +1,29 @@
 import type { Metadata, Viewport } from 'next';
-import { Cormorant_Garamond, Inter } from 'next/font/google';
+import { Cormorant_Garamond, Montserrat, Sacramento } from 'next/font/google';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SITE } from '@/data/navigation';
 import './globals.css';
 
-const inter = Inter({
+const montserrat = Montserrat({
   subsets: ['latin'],
-  variable: '--font-inter',
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-montserrat',
   display: 'swap',
 });
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
   variable: '--font-cormorant',
+  display: 'swap',
+});
+
+const sacramento = Sacramento({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-sacramento',
   display: 'swap',
 });
 
@@ -44,7 +53,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#f8f5f1',
+  themeColor: '#ed2a8c',
   width: 'device-width',
   initialScale: 1,
 };
@@ -55,7 +64,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${inter.variable} ${cormorant.variable} h-full`}>
+    <html
+      lang="es"
+      className={`${montserrat.variable} ${cormorant.variable} ${sacramento.variable} h-full`}
+    >
       <body className="flex min-h-full flex-col">
         <a
           href="#contenido"

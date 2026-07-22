@@ -39,7 +39,7 @@ export function ProcessSteps() {
           >
             <span
               aria-hidden="true"
-              className="font-serif text-4xl text-brand-soft"
+              className="font-serif text-4xl italic text-sand-strong"
             >
               {step.number}
             </span>

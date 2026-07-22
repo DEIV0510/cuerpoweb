@@ -16,8 +16,12 @@ export function PageHeader({
   children,
 }: PageHeaderProps) {
   return (
-    <section className="border-b border-line bg-surface">
-      <div className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
+    <section className="bg-blush-radial relative overflow-hidden border-b border-line">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-24 -top-16 h-72 w-72 rounded-full bg-sand/40 blur-3xl"
+      />
+      <div className="relative mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
         <Eyebrow>{eyebrow}</Eyebrow>
         <h1 className="mt-3 text-4xl sm:text-5xl">{title}</h1>
         <p className="mt-4 max-w-2xl text-lg text-muted">{description}</p>
