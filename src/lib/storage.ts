@@ -1,4 +1,8 @@
-import type { BodyShapeResult, StoredAnalysis } from '@/types/body-shape';
+import type {
+  BodyShapeResult,
+  MeasurementSource,
+  StoredAnalysis,
+} from '@/types/body-shape';
 
 /** Clave única de esta aplicación en localStorage. */
 export const STORAGE_KEY = 'alma-silueta-corporal:last-analysis';
@@ -44,12 +48,14 @@ function isStoredAnalysis(value: unknown): value is StoredAnalysis {
 export function saveAnalysis(
   result: BodyShapeResult,
   createdAt: string = new Date().toISOString(),
+  source: MeasurementSource = 'manual',
 ): StoredAnalysis | null {
   if (!isBrowser()) return null;
 
   const payload: StoredAnalysis = {
     storageVersion: STORAGE_VERSION,
     createdAt,
+    source,
     result,
   };
 

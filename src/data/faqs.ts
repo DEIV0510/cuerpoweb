@@ -31,6 +31,16 @@ export const FAQS: Faq[] = [
       'No. Todo el cálculo ocurre dentro de tu navegador. El último resultado puede quedar guardado en tu propio dispositivo y puedes eliminarlo cuando quieras desde la página de privacidad.',
   },
   {
+    question: '¿Puedo usar una foto en vez de la cinta métrica?',
+    answer:
+      'Sí. Puedes subir una foto de cuerpo completo, marcar tu estatura y el ancho de busto, cintura y cadera, y la aplicación estima los contornos. Es un apoyo cuando no tienes cinta a mano, pero la medición real siempre será más precisa: una foto no puede ver la profundidad del cuerpo.',
+  },
+  {
+    question: '¿Mi foto se sube a internet?',
+    answer:
+      'No. La imagen se abre solo en la memoria de tu dispositivo, se usa para tomar las marcas y se descarta al salir de la pantalla. No se envía, no se guarda y del análisis solo quedan los tres números que confirmes.',
+  },
+  {
     question: '¿Esto es un diagnóstico de salud?',
     answer:
       'No. Es una orientación de imagen y vestuario. No evalúa salud, peso ni composición corporal, y no sustituye la valoración de un profesional de la salud.',

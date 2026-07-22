@@ -8,7 +8,11 @@ interface MeasurementFieldProps {
   label: string;
   hint?: string;
   error?: string;
-  registration: UseFormRegisterReturn;
+  /** Campo gestionado por React Hook Form. */
+  registration?: UseFormRegisterReturn;
+  /** Alternativa controlada, para formularios sin React Hook Form. */
+  value?: string;
+  onValueChange?: (value: string) => void;
   unit?: string;
   /** Enfoca el campo al montarse (cada paso del flujo). */
   autoFocus?: boolean;
@@ -27,6 +31,8 @@ export function MeasurementField({
   hint,
   error,
   registration,
+  value,
+  onValueChange,
   unit = 'cm',
   autoFocus = false,
   enterKeyHint = 'next',
@@ -35,6 +41,12 @@ export function MeasurementField({
   const fieldId = useId();
   const hintId = `${fieldId}-hint`;
   const errorId = `${fieldId}-error`;
+
+  const inputProps = registration ?? {
+    value: value ?? '',
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) =>
+      onValueChange?.(event.target.value),
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -51,7 +63,7 @@ export function MeasurementField({
         )}
       >
         <input
-          {...registration}
+          {...inputProps}
           id={fieldId}
           type="text"
           inputMode="decimal"

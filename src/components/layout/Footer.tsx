@@ -5,15 +5,17 @@ import { usePathname } from 'next/navigation';
 import { FOOTER_NAV, SITE } from '@/data/navigation';
 import { ALGORITHM_VERSION } from '@/lib/body-shape/classify-body-shape';
 
-/** Rutas sin pie de página: el flujo de análisis ocupa toda la pantalla. */
-const HIDDEN_ON = ['/analisis'];
+/** Los flujos de análisis ocupan toda la pantalla y no llevan pie de página. */
+function isFlowRoute(pathname: string): boolean {
+  return pathname.startsWith('/analisis');
+}
 
 /** Pie de página compacto en móvil y en dos columnas desde tablet. */
 export function Footer() {
   const pathname = usePathname() ?? '/';
   const year = new Date().getFullYear();
 
-  if (HIDDEN_ON.includes(pathname)) return null;
+  if (isFlowRoute(pathname)) return null;
 
   return (
     <footer className="no-print border-t border-line bg-surface">

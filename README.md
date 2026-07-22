@@ -190,6 +190,45 @@ Requiere HTTPS, así que funciona en el dominio publicado (o en `localhost`).
 
 ---
 
+## Estimación con foto (opcional)
+
+Además de escribir las medidas, la aplicación permite estimarlas desde una
+fotografía en `/analisis/foto`. **No usa inteligencia artificial ni envía la
+imagen a ningún servicio**: es fotogrametría guiada, y todo el cálculo ocurre en
+el dispositivo.
+
+**Cómo funciona**
+
+1. Subes una foto de cuerpo completo (cámara o galería) e indicas tu estatura.
+2. Marcas tu coronilla y tus pies sobre la foto. Como conoces tu estatura real,
+   eso da la escala: cuántos centímetros representa cada píxel.
+3. Marcas los bordes del cuerpo a la altura de busto, cintura y cadera; esos
+   anchos se convierten a centímetros con la escala anterior.
+4. Cada zona se modela como una elipse: el ancho es el eje mayor y la
+   profundidad se estima como una proporción del ancho (0,80 en busto, 0,74 en
+   cintura y 0,72 en cadera). El contorno es el perímetro de esa elipse,
+   calculado con la aproximación de Ramanujan.
+5. Las tres medidas se muestran **editables** antes de clasificar.
+
+**Limitaciones, dichas claramente**
+
+Una foto frontal no puede ver la profundidad del cuerpo, así que el resultado es
+una estimación. La postura, la ropa, la distancia y la perspectiva de la cámara
+también desplazan los valores. La cinta métrica sigue siendo el método fiable; la
+foto sirve como punto de partida. El resultado queda marcado como «estimado desde
+una foto».
+
+**Privacidad de la imagen**
+
+La foto se abre con `URL.createObjectURL` (una URL temporal en memoria), nunca se
+sube ni se escribe en el almacenamiento, y se libera con `URL.revokeObjectURL` al
+salir de la pantalla. Del análisis solo se guardan los tres números confirmados.
+
+La matemática vive en `src/lib/photo/photo-estimation.ts` y está cubierta por 25
+pruebas unitarias.
+
+---
+
 ## El algoritmo
 
 La función principal es pura, determinista y está separada de la interfaz:
@@ -279,6 +318,7 @@ src/
 │   ├── page.tsx                # Inicio
 │   ├── como-medirse/page.tsx   # Guía de medición
 │   ├── analisis/page.tsx       # Flujo por pasos
+│   ├── analisis/foto/page.tsx  # Estimación con fotografía
 │   ├── resultado/page.tsx      # Resultado
 │   ├── metodologia/page.tsx    # Cómo se calcula
 │   ├── privacidad/page.tsx     # Privacidad y borrado de datos
@@ -305,6 +345,9 @@ src/
 │   │   ├── calculations.ts              # Diferencias y formato
 │   │   ├── validation.ts                # Rangos, mensajes y avisos
 │   │   └── classify-body-shape.test.ts  # Pruebas unitarias
+│   ├── photo/
+│   │   ├── photo-estimation.ts       # Fotogrametría y modelo elíptico
+│   │   └── photo-estimation.test.ts  # Pruebas de la estimación
 │   ├── storage.ts              # localStorage (guardar, leer, borrar)
 │   ├── share.ts                # Web Share API con respaldo al portapapeles
 │   └── utils.ts
@@ -323,6 +366,7 @@ src/
 | `/` | Presentación, proceso en tres pasos, las cinco siluetas, beneficios, privacidad y preguntas frecuentes |
 | `/como-medirse` | Guía visual completa para tomar cada medida |
 | `/analisis` | Flujo de cinco pasos a pantalla completa, con progreso guardado y aviso de valores poco habituales |
+| `/analisis/foto` | Estimación de las medidas marcando puntos sobre una foto, en seis pasos |
 | `/resultado` | Silueta, explicación, comparación de medidas, reglas, recomendaciones y outfits |
 | `/metodologia` | Medidas usadas, orden de reglas, límites del método y versión del algoritmo |
 | `/privacidad` | Qué se guarda, dónde y botón para eliminar los datos locales |
@@ -377,7 +421,8 @@ La arquitectura está preparada para crecer sin reescribir el núcleo:
 - Historial de análisis y comparación entre fechas.
 - Cuentas de usuario opcionales y sincronización entre dispositivos.
 - Módulo de colorimetría como aplicación hermana (siempre independiente).
-- Estimación de medidas a partir de fotografía, con consentimiento explícito.
+- Segunda foto de perfil para medir la profundidad real en vez de estimarla.
+- Detección automática de los puntos del cuerpo sobre la foto.
 - Exportación a PDF con diseño propio y catálogo de prendas con imágenes.
 - Nuevas versiones de la fórmula (`algorithmVersion`) con notas de cambio.
 

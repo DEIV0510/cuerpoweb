@@ -162,11 +162,16 @@ export interface BodyShapeResult {
   algorithmVersion: string;
 }
 
+/** Cómo se obtuvieron las medidas del análisis. */
+export type MeasurementSource = 'manual' | 'photo';
+
 /** Análisis guardado localmente en el dispositivo. */
 export interface StoredAnalysis {
   /** Versión del formato de almacenamiento. */
   storageVersion: number;
   /** Fecha ISO en la que se realizó el análisis. */
   createdAt: string;
+  /** Origen de las medidas. Ausente en análisis anteriores. */
+  source?: MeasurementSource;
   result: BodyShapeResult;
 }

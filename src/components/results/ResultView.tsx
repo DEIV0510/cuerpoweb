@@ -82,7 +82,7 @@ export function ResultView() {
     );
   }
 
-  const { result, createdAt } = analysis;
+  const { result, createdAt, source } = analysis;
 
   return (
     <div className="app-shell flex flex-col gap-4 px-gutter py-5 sm:gap-5 sm:py-8">
@@ -96,7 +96,7 @@ export function ResultView() {
 
       {/* 1 · Resumen de la silueta */}
       <div className="alma-fade-up">
-        <ResultHero result={result} createdAt={createdAt} />
+        <ResultHero result={result} createdAt={createdAt} source={source} />
       </div>
 
       <a

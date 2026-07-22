@@ -2,15 +2,17 @@ import { SilhouetteIllustration } from '@/components/ui/SilhouetteIllustration';
 import { getBodyShapeProfile } from '@/data/body-shapes';
 import { formatCm } from '@/lib/body-shape/calculations';
 import { formatLongDate } from '@/lib/utils';
-import type { BodyShapeResult } from '@/types/body-shape';
+import type { BodyShapeResult, MeasurementSource } from '@/types/body-shape';
 
 interface ResultHeroProps {
   result: BodyShapeResult;
   createdAt: string;
+  /** Cómo se obtuvieron las medidas. */
+  source?: MeasurementSource;
 }
 
 /** Primera pantalla del resultado: silueta, nombre y resumen breve. */
-export function ResultHero({ result, createdAt }: ResultHeroProps) {
+export function ResultHero({ result, createdAt, source = 'manual' }: ResultHeroProps) {
   const profile = getBodyShapeProfile(result.type);
   const { bust, waist, hips } = result.measurements;
 
@@ -61,6 +63,13 @@ export function ResultHero({ result, createdAt }: ResultHeroProps) {
       <p className="mt-4 text-xs text-faint">
         Análisis del {formatLongDate(createdAt)}
       </p>
+
+      {source === 'photo' ? (
+        <p className="mx-auto mt-3 max-w-sm rounded-2xl bg-surface/80 px-4 py-3 text-sm text-muted">
+          Medidas <strong className="text-ink">estimadas desde una foto</strong>.
+          Confírmalas con una cinta métrica para afinar tu guía.
+        </p>
+      ) : null}
 
       {result.warnings.length > 0 ? (
         <div className="mt-5 rounded-2xl border border-sand bg-surface/80 p-4 text-left text-sm text-brand-dark">

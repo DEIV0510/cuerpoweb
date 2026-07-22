@@ -2,6 +2,7 @@
 import { ArrowRight } from 'lucide-react';
 import { HeroSection } from '@/components/home/HeroSection';
 import { ProcessSteps } from '@/components/home/ProcessSteps';
+import { StartOptions } from '@/components/home/StartOptions';
 import { BodyShapePreview } from '@/components/home/BodyShapePreview';
 import { Benefits } from '@/components/home/Benefits';
 import { Faq } from '@/components/ui/Faq';
@@ -15,6 +16,7 @@ export default function HomePage() {
     <>
       <HeroSection />
       <ProcessSteps />
+      <StartOptions />
       <BodyShapePreview />
       <Benefits />
 

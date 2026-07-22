@@ -14,6 +14,10 @@ import {
   MAX_MEASUREMENT_CM,
   MIN_MEASUREMENT_CM,
 } from '@/lib/body-shape/validation';
+import {
+  DEPTH_RATIOS,
+  PHOTO_ESTIMATION_VERSION,
+} from '@/lib/photo/photo-estimation';
 
 export const metadata: Metadata = {
   title: 'Metodología',
@@ -247,6 +251,48 @@ export default function MetodologiaPage() {
               </li>
             ))}
           </ul>
+        </section>
+
+        <section
+          aria-labelledby="metodo-foto"
+          className="rounded-card border border-line bg-surface p-6 sm:p-8"
+        >
+          <h2 id="metodo-foto" className="text-2xl">
+            La estimación con foto
+          </h2>
+          <p className="mt-3 text-muted">
+            Es opcional y funciona por fotogrametría guiada, no por inteligencia
+            artificial. Tú marcas los puntos y la aplicación hace la aritmética:
+          </p>
+          <ol className="mt-4 flex flex-col gap-3 text-[0.95rem] text-muted">
+            <li className="rounded-2xl bg-shell p-4">
+              <span className="font-semibold text-ink">1. Escala. </span>
+              Marcas tu coronilla y tus pies en la foto. Como conoces tu estatura
+              real, se obtiene cuántos centímetros representa cada píxel.
+            </li>
+            <li className="rounded-2xl bg-shell p-4">
+              <span className="font-semibold text-ink">2. Anchos. </span>
+              Marcas los bordes del cuerpo a la altura de busto, cintura y cadera, y
+              esos anchos se convierten a centímetros con la escala anterior.
+            </li>
+            <li className="rounded-2xl bg-shell p-4">
+              <span className="font-semibold text-ink">3. Contorno. </span>
+              Cada zona se modela como una elipse: el ancho es su eje mayor y la
+              profundidad se estima como una proporción del ancho ({DEPTH_RATIOS.bust}{' '}
+              en busto, {DEPTH_RATIOS.waist} en cintura y {DEPTH_RATIOS.hips} en
+              cadera). El contorno es el perímetro de esa elipse, calculado con la
+              aproximación de Ramanujan.
+            </li>
+          </ol>
+          <p className="mt-4 rounded-2xl border border-sand bg-brand-soft/40 p-4 text-[0.95rem] text-brand-dark">
+            Por eso el resultado es una estimación: la profundidad no se ve en una
+            foto frontal, y la postura, la ropa o la perspectiva de la cámara
+            desplazan los valores. Las medidas se muestran siempre editables antes
+            de clasificar, y una cinta métrica sigue siendo el método fiable.
+          </p>
+          <p className="mt-3 text-sm text-faint">
+            Método por foto versión {PHOTO_ESTIMATION_VERSION}.
+          </p>
         </section>
 
         <section

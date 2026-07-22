@@ -23,10 +23,10 @@ export function PrivacyNotice({ className, withLink = true }: PrivacyNoticeProps
       <div className="text-[0.95rem] text-muted">
         <p className="font-semibold text-ink">Tus medidas no salen de tu dispositivo</p>
         <p className="mt-1">
-          El cálculo se ejecuta dentro de tu navegador. No se sube ninguna
-          fotografía, no se crea una cuenta y no se envía información a servidores
-          externos. El último resultado queda guardado solo en tu dispositivo y
-          puedes eliminarlo cuando quieras.
+          El cálculo se ejecuta dentro de tu navegador. Si usas el análisis con
+          foto, la imagen se queda en la memoria de tu teléfono: no se sube ni se
+          guarda. No se crea una cuenta ni se envía información a servidores
+          externos, y el último resultado puedes eliminarlo cuando quieras.
         </p>
         {withLink ? (
           <Link

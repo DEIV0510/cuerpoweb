@@ -9,8 +9,10 @@ import { MobileMenu } from '@/components/layout/MobileMenu';
 import { buttonClasses } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 
-/** Rutas que dibujan su propio encabezado (el flujo de análisis). */
-const OWN_HEADER_ROUTES = ['/analisis'];
+/** Los flujos de análisis dibujan su propio encabezado con el paso actual. */
+function hasOwnHeader(pathname: string): boolean {
+  return pathname.startsWith('/analisis');
+}
 
 /** Encabezado móvil compacto: 56 px, wordmark y una sola acción a cada lado. */
 export function Header() {
@@ -18,7 +20,7 @@ export function Header() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  if (OWN_HEADER_ROUTES.includes(pathname)) return null;
+  if (hasOwnHeader(pathname)) return null;
 
   const isHome = pathname === '/';
 

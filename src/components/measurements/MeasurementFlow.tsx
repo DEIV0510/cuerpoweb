@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowRight, Check, Pencil, Sparkles } from 'lucide-react';
+import { ArrowRight, Camera, Check, Pencil, Sparkles } from 'lucide-react';
 import { Accordion } from '@/components/ui/Accordion';
 import { Button, buttonClasses } from '@/components/ui/Button';
 import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
@@ -259,6 +259,25 @@ export function MeasurementFlow({ initialDraft }: MeasurementFlowProps) {
                   ))}
                 </ul>
               </Accordion>
+
+              <div className="rounded-card border border-line bg-surface p-5">
+                <div className="flex items-start gap-3">
+                  <Camera aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-brand" />
+                  <div>
+                    <p className="font-medium text-ink">¿No tienes cinta métrica?</p>
+                    <p className="mt-1 text-[0.9rem] text-muted">
+                      Puedes estimar tus medidas desde una foto de cuerpo completo.
+                      Es menos preciso, pero te da un punto de partida.
+                    </p>
+                    <Link
+                      href="/analisis/foto"
+                      className={buttonClasses('secondary', 'md', 'mt-3 w-full')}
+                    >
+                      Estimar desde una foto
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </section>
           ) : null}
 

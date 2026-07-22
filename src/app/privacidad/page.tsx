@@ -14,8 +14,9 @@ export const metadata: Metadata = {
 };
 
 const POINTS = [
-  'En esta versión no se suben fotografías: la aplicación no solicita acceso a la cámara ni a tus archivos.',
   'Tus medidas se procesan dentro del navegador. No viajan a ningún servidor ni a servicios de terceros.',
+  'Si eliges estimar tus medidas con una foto, la imagen se abre solo en la memoria de tu dispositivo: no se sube, no se guarda y se descarta al salir de la pantalla.',
+  'La aplicación no pide acceso permanente a tu cámara ni a tu galería: solo se abre el selector del sistema cuando tú lo tocas.',
   'No se requiere crear una cuenta ni iniciar sesión.',
   'El último resultado puede guardarse localmente en tu dispositivo para que puedas volver a consultarlo.',
   'Puedes eliminar esos datos cuando quieras desde esta misma página.',
@@ -67,6 +68,28 @@ export default function PrivacidadPage() {
             Si usas el modo privado o incógnito, el resultado se borrará solo al
             cerrar la ventana. Si borras los datos de navegación, también
             desaparecerá.
+          </p>
+        </section>
+
+        <section
+          aria-labelledby="fotos"
+          className="rounded-card border border-line bg-surface p-6 sm:p-8"
+        >
+          <h2 id="fotos" className="text-2xl">
+            Qué pasa con tus fotos
+          </h2>
+          <p className="mt-3 text-muted">
+            El análisis con foto usa una <strong className="text-ink">URL temporal
+            en memoria</strong> (<code className="rounded-md bg-shell px-2 py-0.5 text-sm">
+              URL.createObjectURL
+            </code>
+            ). La imagen nunca se envía por la red, nunca se escribe en el
+            almacenamiento del navegador y se libera en cuanto sales de la pantalla
+            o cierras la aplicación.
+          </p>
+          <p className="mt-3 text-muted">
+            Del análisis solo quedan guardados los tres números que confirmaste, no
+            la fotografía ni las marcas que hiciste sobre ella.
           </p>
         </section>
 
