@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# editores y herramientas locales
+.idea/
+.vscode/
+.claude/
+
+# resultados de pruebas
+/test-results
+/playwright-report

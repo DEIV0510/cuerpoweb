@@ -1,36 +1,305 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Alma e Imagen · Analizador de silueta corporal
 
-## Getting Started
+Aplicación web que identifica la **silueta corporal predominante** a partir de tres
+medidas (busto, cintura y cadera) y entrega una guía completa de vestuario:
+prendas, escotes, telas, estampados, accesorios y outfits completos.
 
-First, run the development server:
+Todo el cálculo se ejecuta **dentro del navegador**. No hay servidores, cuentas,
+fotografías, pagos ni servicios externos.
+
+> **Proyecto independiente.** Esta aplicación no comparte código, dependencias,
+> repositorio ni datos con la aplicación de colorimetría. No importa nada de ella
+> ni escribe en su almacenamiento.
+
+---
+
+## Objetivo
+
+Que cualquier persona pueda:
+
+1. Aprender a tomarse tres medidas correctamente.
+2. Registrarlas en centímetros y confirmarlas antes de calcular.
+3. Recibir su silueta predominante con la **explicación matemática** del resultado.
+4. Consultar recomendaciones de vestuario organizadas por categoría.
+5. Imprimir, guardar o compartir un resumen.
+
+El lenguaje de toda la aplicación es respetuoso e inclusivo: no existe una silueta
+mejor ni peor, y las recomendaciones hablan de **equilibrio visual** y de
+**potenciar las proporciones naturales**, nunca de corregir o disimular el cuerpo.
+
+El resultado es una **orientación de imagen y vestuario**, no una evaluación médica.
+
+---
+
+## Tecnologías
+
+| Herramienta | Uso |
+| --- | --- |
+| Next.js 16 (App Router) | Estructura de páginas y renderizado |
+| TypeScript (modo estricto) | Tipado de dominio, datos y componentes |
+| Tailwind CSS 4 | Sistema de diseño mediante tokens en `globals.css` |
+| React Hook Form | Manejo del formulario de medidas |
+| Zod 4 | Validación y transformación de los campos |
+| Lucide React | Iconografía |
+| Vitest | Pruebas unitarias del algoritmo y del esquema |
+| ESLint (`eslint-config-next`) | Calidad de código |
+| `next/font` | Cormorant Garamond (títulos) e Inter (texto) |
+
+No se usan bases de datos, APIs externas, claves ni variables de entorno.
+
+---
+
+## Instalación
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Comandos disponibles
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Comando | Descripción |
+| --- | --- |
+| `npm run dev` | Servidor de desarrollo (por defecto en `http://localhost:3000`) |
+| `npm run build` | Compilación de producción |
+| `npm start` | Sirve la compilación de producción |
+| `npm test` | Ejecuta las pruebas unitarias con Vitest |
+| `npm run test:watch` | Pruebas en modo observador |
+| `npm run lint` | Revisión con ESLint |
+| `npm run typecheck` | Verificación de tipos con `tsc --noEmit` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Cómo ejecutar
 
-## Learn More
+```bash
+npm install
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Luego abre `http://localhost:3000` en el navegador. Para usar otro puerto:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run dev -- -p 5240
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Cómo ejecutar las pruebas
 
-## Deploy on Vercel
+```bash
+npm test
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Cómo compilar
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run build
+npm start
+```
+
+### Cómo desplegar en Vercel
+
+1. Sube el repositorio a GitHub.
+2. En Vercel, elige **Add New → Project** e importa el repositorio.
+3. Vercel detecta Next.js automáticamente: framework `Next.js`, comando de
+   compilación `npm run build`.
+4. No hay variables de entorno que configurar.
+5. Pulsa **Deploy**.
+
+---
+
+## El algoritmo
+
+La función principal es pura, determinista y está separada de la interfaz:
+
+```ts
+import { classifyBodyShape } from '@/lib/body-shape/classify-body-shape';
+
+const resultado = classifyBodyShape({ bust: 98, waist: 74, hips: 99 });
+// resultado.type === 'hourglass'
+```
+
+Devuelve un objeto con `type`, `name`, `shortName`, `explanation`, `measurements`,
+`calculatedDifferences`, `matchedRules`, `visualObjective`, `recommendations`,
+`warnings` y `algorithmVersion`.
+
+Versión actual del algoritmo: **1.0.0**.
+
+### Variables
+
+Con `B` = busto, `C` = cintura y `H` = cadera:
+
+```
+differenceBustHips     = |B − H|
+hipsMinusBust          = H − B
+bustMinusHips          = B − H
+bustWaistDifference    = B − C
+hipsWaistDifference    = H − C
+averageBustHips        = (B + H) / 2
+averageWaistDifference = averageBustHips − C
+```
+
+Todas las diferencias se redondean a dos decimales antes de compararse, para que
+los límites exactos (5 cm, 10 cm, 20 cm) no se vean afectados por errores de coma
+flotante.
+
+### Orden de prioridad de las reglas
+
+Las reglas se evalúan **en este orden** y gana la primera que se cumple:
+
+| # | Silueta | Condición |
+| --- | --- | --- |
+| 1 | Óvalo | `(C ≥ B y C ≥ H)` **o** `(abs(B − C) < 10 y abs(H − C) < 10)` |
+| 2 | Triángulo | `H − B > 5` |
+| 3 | Triángulo invertido | `B − H > 5` |
+| 4 | Reloj de arena | `abs(B − H) ≤ 5` y `B − C ≥ 20` y `H − C ≥ 20` |
+| 5 | Rectángulo | `abs(B − H) ≤ 5` sin cumplir la condición de cintura de la regla 4 |
+
+El óvalo se evalúa primero porque, cuando la cintura iguala o se acerca mucho a las
+otras dos medidas, esa zona domina la proporción visual. Si ninguna de las reglas
+1 a 4 se cumple, `abs(B − H) ≤ 5` es necesariamente cierto: el algoritmo siempre
+devuelve una silueta.
+
+### Manejo de límites
+
+- 5 cm exactos entre busto y cadera → se consideran **medidas similares**.
+- Triángulo y triángulo invertido exigen una diferencia **mayor** de 5 cm.
+- 20 cm exactos entre cintura y busto/cadera **sí** permiten reloj de arena.
+- Para el óvalo, 10 cm exactos **no** entran por la condición «menor de 10», salvo
+  que la cintura sea la medida predominante.
+
+### Ejemplos de clasificación
+
+| Busto | Cintura | Cadera | Resultado |
+| --- | --- | --- | --- |
+| 98 | 74 | 99 | Reloj de arena |
+| 92 | 73 | 101 | Triángulo |
+| 104 | 80 | 95 | Triángulo invertido |
+| 96 | 82 | 95 | Rectángulo |
+| 100 | 96 | 98 | Óvalo |
+
+### Validación de entrada
+
+- Las tres medidas son obligatorias, numéricas y deben estar entre **45 y 220 cm**.
+- Se acepta un decimal como máximo, con punto o coma (`92`, `92.5`, `101,3`).
+- Se rechazan textos, `NaN`, `Infinity` y valores negativos.
+- La altura es opcional (120–230 cm) y **no** modifica la clasificación.
+- Las combinaciones poco habituales **no se bloquean**: se muestra un diálogo de
+  confirmación con un aviso, y la persona decide si continúa.
+
+---
+
+## Estructura del proyecto
+
+```
+src/
+├── app/
+│   ├── page.tsx                # Inicio
+│   ├── como-medirse/page.tsx   # Guía de medición
+│   ├── analisis/page.tsx       # Formulario
+│   ├── resultado/page.tsx      # Resultado
+│   ├── metodologia/page.tsx    # Cómo se calcula
+│   ├── privacidad/page.tsx     # Privacidad y borrado de datos
+│   ├── not-found.tsx
+│   ├── layout.tsx
+│   └── globals.css             # Tokens de diseño y estilos de impresión
+├── components/
+│   ├── layout/                 # Header, MobileMenu, Footer, PageHeader
+│   ├── home/                   # Hero, ProcessSteps, BodyShapePreview, Benefits
+│   ├── measurements/           # Guía, ilustraciones, campos, formulario, resumen
+│   ├── results/                # Resultado, gráfico, reglas, pestañas, outfits
+│   └── ui/                     # Button, Card, Faq, diálogos, silueta SVG
+├── data/
+│   ├── body-shapes.ts          # Fichas de las cinco siluetas
+│   ├── recommendations.ts      # Recomendaciones y outfits por silueta
+│   ├── measurement-guide.ts    # Instrucciones de medición
+│   ├── faqs.ts
+│   └── navigation.ts
+├── lib/
+│   ├── body-shape/
+│   │   ├── classify-body-shape.ts       # Algoritmo principal
+│   │   ├── calculations.ts              # Diferencias y formato
+│   │   ├── validation.ts                # Rangos, mensajes y avisos
+│   │   └── classify-body-shape.test.ts  # Pruebas unitarias
+│   ├── storage.ts              # localStorage (guardar, leer, borrar)
+│   ├── share.ts                # Web Share API con respaldo al portapapeles
+│   └── utils.ts
+├── schemas/
+│   └── measurements-schema.ts  # Esquema Zod del formulario
+└── types/
+    └── body-shape.ts           # Tipos del dominio
+```
+
+---
+
+## Páginas
+
+| Ruta | Contenido |
+| --- | --- |
+| `/` | Presentación, proceso en tres pasos, las cinco siluetas, beneficios, privacidad y preguntas frecuentes |
+| `/como-medirse` | Guía visual completa para tomar cada medida |
+| `/analisis` | Formulario, confirmación de medidas y aviso de valores poco habituales |
+| `/resultado` | Silueta, explicación, comparación de medidas, reglas, recomendaciones y outfits |
+| `/metodologia` | Medidas usadas, orden de reglas, límites del método y versión del algoritmo |
+| `/privacidad` | Qué se guarda, dónde y botón para eliminar los datos locales |
+
+---
+
+## Privacidad
+
+- No se suben fotografías ni se solicita acceso a la cámara.
+- Las medidas se procesan en el navegador; no viajan a ningún servidor.
+- No hay cuentas, inicio de sesión ni analítica de terceros.
+- El último resultado se guarda en `localStorage` bajo la clave
+  `alma-silueta-corporal:last-analysis`.
+- La página `/privacidad` incluye un botón funcional para eliminar esos datos.
+- El resumen que se comparte **no incluye las medidas**, solo la silueta y algunas
+  recomendaciones.
+
+---
+
+## Accesibilidad
+
+- HTML semántico, enlace «saltar al contenido» y navegación completa por teclado.
+- `label` reales asociados a cada campo, `aria-invalid`, `aria-describedby` y
+  mensajes de error vinculados.
+- Región `aria-live` para los mensajes del formulario y de las acciones.
+- Diálogos con `role="dialog"` / `role="alertdialog"`, cierre con `Escape` y ciclo
+  de foco contenido.
+- Pestañas con `role="tablist"` y navegación con flechas, `Home` y `End`.
+- Estados de foco visibles, contraste alto y áreas táctiles de al menos 44 px.
+- Se respeta `prefers-reduced-motion`.
+- La información nunca depende solo del color: los gráficos incluyen los valores.
+
+---
+
+## Limitaciones
+
+- Las siluetas son categorías orientativas; muchas personas presentan
+  características mixtas, sobre todo cerca de un límite.
+- El método no considera altura, estructura ósea, proporción entre torso y piernas
+  ni distribución del volumen.
+- La postura, la ropa y la tensión de la cinta pueden mover el resultado.
+- No es un diagnóstico médico ni una valoración de salud o composición corporal.
+- No se muestran porcentajes de certeza porque el método no los tiene.
+
+---
+
+## Posibles mejoras futuras
+
+La arquitectura está preparada para crecer sin reescribir el núcleo:
+
+- Historial de análisis y comparación entre fechas.
+- Cuentas de usuario opcionales y sincronización entre dispositivos.
+- Módulo de colorimetría como aplicación hermana (siempre independiente).
+- Estimación de medidas a partir de fotografía, con consentimiento explícito.
+- Exportación a PDF con diseño propio y catálogo de prendas con imágenes.
+- Nuevas versiones de la fórmula (`algorithmVersion`) con notas de cambio.
+
+---
+
+## Independencia del proyecto
+
+Este repositorio es autónomo: tiene su propio `package.json`, sus propias
+dependencias, su propia clave de `localStorage` y su propio historial de Git. No
+lee, escribe ni importa nada de la aplicación de colorimetría.
+
+---
+
+© Alma e Imagen · Analizador de silueta corporal · Algoritmo versión 1.0.0

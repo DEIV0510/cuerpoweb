@@ -1,17 +1,25 @@
 {
-  "name": "cuerpoweb",
-  "version": "0.1.0",
+  "name": "alma-silueta-corporal",
+  "version": "1.0.0",
   "private": true,
+  "description": "Analizador de silueta corporal de Alma e Imagen. Calcula la silueta predominante a partir de busto, cintura y cadera y entrega recomendaciones de vestuario.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
+    "lucide-react": "^1.25.0",
     "next": "16.2.11",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-hook-form": "^7.82.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -21,6 +29,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.11",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   }
 }
