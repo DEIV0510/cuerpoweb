@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Printer, RotateCcw, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { shareResult } from '@/lib/share';
+import { buildShareSummary, shareResult } from '@/lib/share';
 import { clearAnalysis } from '@/lib/storage';
 import type { BodyShapeResult } from '@/types/body-shape';
 
@@ -17,13 +17,14 @@ const SHARE_MESSAGES: Record<string, string> = {
   copied: 'Resumen copiado al portapapeles.',
   cancelled: 'No se compartió el resumen.',
   unavailable:
-    'Tu navegador no permitió compartir ni copiar. Puedes usar el botón de imprimir para guardar tu ficha.',
+    'Tu navegador no permitió compartir ni copiar automáticamente. Aquí tienes el resumen para copiarlo a mano.',
 };
 
 /** Acciones disponibles sobre el resultado. */
 export function ResultActions({ result }: ResultActionsProps) {
   const router = useRouter();
   const [status, setStatus] = useState('');
+  const [manualSummary, setManualSummary] = useState('');
 
   function handleRestart() {
     clearAnalysis();
@@ -38,6 +39,7 @@ export function ResultActions({ result }: ResultActionsProps) {
     setStatus('');
     const outcome = await shareResult(result);
     setStatus(SHARE_MESSAGES[outcome] ?? '');
+    setManualSummary(outcome === 'unavailable' ? buildShareSummary(result) : '');
   }
 
   return (
@@ -72,6 +74,19 @@ export function ResultActions({ result }: ResultActionsProps) {
       <p aria-live="polite" className="min-h-6 text-sm text-muted">
         {status}
       </p>
+
+      {manualSummary ? (
+        <label className="flex flex-col gap-2 text-sm text-muted">
+          <span className="font-medium text-ink">Resumen para copiar</span>
+          <textarea
+            readOnly
+            rows={8}
+            value={manualSummary}
+            onFocus={(event) => event.currentTarget.select()}
+            className="w-full rounded-2xl border border-line bg-surface p-4 text-[0.95rem] text-ink"
+          />
+        </label>
+      ) : null}
 
       <p className="text-sm text-muted">
         El resumen que se comparte incluye tu silueta y algunas recomendaciones, no
