@@ -4,6 +4,10 @@ Aplicación web que identifica la **silueta corporal predominante** a partir de 
 medidas (busto, cintura y cadera) y entrega una guía completa de vestuario:
 prendas, escotes, telas, estampados, accesorios y outfits completos.
 
+Está diseñada **mobile first**: es una aplicación para el teléfono que además se
+adapta a tablet y escritorio, no una página de escritorio reducida. Puede
+instalarse desde el navegador como PWA.
+
 Todo el cálculo se ejecuta **dentro del navegador**. No hay servidores, cuentas,
 fotografías, pagos ni servicios externos.
 
@@ -117,6 +121,75 @@ npm start
 
 ---
 
+## Experiencia móvil
+
+La aplicación se construyó primero para anchos de 320 a 430 px y después se
+amplió a tablet y escritorio.
+
+**Apariencia de app**
+
+- Encabezado compacto de 56 px con wordmark, botón de retroceso y menú.
+- El análisis ocupa la pantalla completa: encabezado propio con «Paso X de 5» y
+  barra de progreso, sin navegación que distraiga.
+- Acción principal en una **barra inferior fija** que respeta el área segura y
+  acompaña al teclado (es `sticky`, no `fixed`).
+- Menú y confirmaciones como **paneles inferiores** deslizantes, con foco
+  atrapado y cierre con `Escape`.
+- Estado de carga cuidado mientras se calcula la silueta.
+
+**Flujo del análisis en seis pantallas**
+
+1. Preparación y consejos esenciales.
+2. Contorno de busto.
+3. Contorno de cintura.
+4. Contorno de cadera.
+5. Confirmación de las tres medidas (con botón «Editar» por medida).
+6. Resultado.
+
+El progreso se guarda en `localStorage` (`alma-silueta-corporal:draft`): si se
+cierra la aplicación a mitad del proceso, al volver se retoma en el mismo paso y
+con los valores escritos. Al terminar el análisis el borrador se elimina.
+
+**Campos de medida**
+
+- `inputMode="decimal"` para abrir el teclado numérico.
+- 60 px de alto, número centrado a 30 px y unidad «cm» visible.
+- Nunca por debajo de 16 px, para que iOS no haga zoom automático.
+- Error debajo del campo con altura reservada: el diseño no salta.
+- `enterKeyHint` avanza al siguiente paso desde el teclado.
+
+**Áreas seguras**
+
+Se usan `env(safe-area-inset-*)` en encabezado, barra inferior, paneles y pie de
+página, junto con `viewport-fit=cover` e `interactive-widget=resizes-content`.
+
+**Resultado**
+
+Pantalla de resumen con la silueta y un botón «Ver mis recomendaciones»; después
+el detalle en acordeones (`<details>`, sin JavaScript) en este orden: por qué se
+obtuvo, comparación de medidas, objetivo visual, las diez categorías de prendas,
+outfits completos y las acciones de compartir, imprimir o repetir el análisis.
+
+**Verificado en** 320, 360, 375, 390, 412, 430 y 768 px: sin desplazamiento
+horizontal, sin textos cortados y con áreas táctiles de 44 px o más.
+
+---
+
+## PWA
+
+- `manifest.webmanifest` generado desde `src/app/manifest.ts`.
+- Nombre corto **Mi silueta**, `display: standalone`, `orientation:
+  portrait-primary`, color de tema `#ED2A8C` y fondo `#FFF6FA`.
+- Iconos 192, 512 y 512 *maskable* en `public/`, más `apple-icon.png` (180 px) e
+  `icon.svg`.
+- Accesos directos a «Analizar» y «Cómo medirse» desde el icono instalado.
+
+Para instalarla: abre la aplicación en Chrome (Android) y elige **Añadir a la
+pantalla de inicio**; en iPhone, desde Safari, **Compartir → Añadir a inicio**.
+Requiere HTTPS, así que funciona en el dominio publicado (o en `localhost`).
+
+---
+
 ## El algoritmo
 
 La función principal es pura, determinista y está separada de la interfaz:
@@ -205,19 +278,21 @@ src/
 ├── app/
 │   ├── page.tsx                # Inicio
 │   ├── como-medirse/page.tsx   # Guía de medición
-│   ├── analisis/page.tsx       # Formulario
+│   ├── analisis/page.tsx       # Flujo por pasos
 │   ├── resultado/page.tsx      # Resultado
 │   ├── metodologia/page.tsx    # Cómo se calcula
 │   ├── privacidad/page.tsx     # Privacidad y borrado de datos
+│   ├── manifest.ts             # PWA
+│   ├── icon.svg / apple-icon.png
 │   ├── not-found.tsx
 │   ├── layout.tsx
-│   └── globals.css             # Tokens de diseño y estilos de impresión
+│   └── globals.css             # Tokens, áreas seguras y estilos de impresión
 ├── components/
 │   ├── layout/                 # Header, MobileMenu, Footer, PageHeader
 │   ├── home/                   # Hero, ProcessSteps, BodyShapePreview, Benefits
-│   ├── measurements/           # Guía, ilustraciones, campos, formulario, resumen
-│   ├── results/                # Resultado, gráfico, reglas, pestañas, outfits
-│   └── ui/                     # Button, Card, Faq, diálogos, silueta SVG
+│   ├── measurements/           # Flujo por pasos, campo táctil, guía, ilustraciones
+│   ├── results/                # Resultado, gráfico, reglas, acordeones, outfits
+│   └── ui/                     # Button, Card, Accordion, BottomSheet, silueta SVG
 ├── data/
 │   ├── body-shapes.ts          # Fichas de las cinco siluetas
 │   ├── recommendations.ts      # Recomendaciones y outfits por silueta
@@ -247,7 +322,7 @@ src/
 | --- | --- |
 | `/` | Presentación, proceso en tres pasos, las cinco siluetas, beneficios, privacidad y preguntas frecuentes |
 | `/como-medirse` | Guía visual completa para tomar cada medida |
-| `/analisis` | Formulario, confirmación de medidas y aviso de valores poco habituales |
+| `/analisis` | Flujo de cinco pasos a pantalla completa, con progreso guardado y aviso de valores poco habituales |
 | `/resultado` | Silueta, explicación, comparación de medidas, reglas, recomendaciones y outfits |
 | `/metodologia` | Medidas usadas, orden de reglas, límites del método y versión del algoritmo |
 | `/privacidad` | Qué se guarda, dónde y botón para eliminar los datos locales |
@@ -260,7 +335,8 @@ src/
 - Las medidas se procesan en el navegador; no viajan a ningún servidor.
 - No hay cuentas, inicio de sesión ni analítica de terceros.
 - El último resultado se guarda en `localStorage` bajo la clave
-  `alma-silueta-corporal:last-analysis`.
+  `alma-silueta-corporal:last-analysis`, y el progreso del formulario bajo
+  `alma-silueta-corporal:draft`. El botón de borrado elimina ambos.
 - La página `/privacidad` incluye un botón funcional para eliminar esos datos.
 - El resumen que se comparte **no incluye las medidas**, solo la silueta y algunas
   recomendaciones.

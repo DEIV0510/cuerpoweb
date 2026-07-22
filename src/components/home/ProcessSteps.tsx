@@ -1,4 +1,4 @@
-import { SectionHeading } from '@/components/ui/Card';
+﻿import { SectionHeading } from '@/components/ui/Card';
 
 const STEPS = [
   {
@@ -24,7 +24,7 @@ const STEPS = [
 /** Explicación del proceso en tres pasos. */
 export function ProcessSteps() {
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+    <section className="app-shell app-shell-wide px-gutter py-12 sm:py-16">
       <SectionHeading
         eyebrow="Cómo funciona"
         title="Tres pasos, cinco minutos"

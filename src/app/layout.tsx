@@ -43,6 +43,13 @@ export const metadata: Metadata = {
     'Alma e Imagen',
   ],
   robots: { index: true, follow: true },
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    title: 'Mi silueta',
+    statusBarStyle: 'default',
+  },
+  formatDetection: { telephone: false },
   openGraph: {
     type: 'website',
     locale: 'es_CO',
@@ -56,6 +63,13 @@ export const viewport: Viewport = {
   themeColor: '#ed2a8c',
   width: 'device-width',
   initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  // Deja el contenido bajo la barra de estado y el notch; el diseño usa las
+  // variables env(safe-area-inset-*) para respetar esas zonas.
+  viewportFit: 'cover',
+  // En Android el teclado redimensiona la vista en vez de taparla.
+  interactiveWidget: 'resizes-content',
 };
 
 export default function RootLayout({

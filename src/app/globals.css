@@ -6,6 +6,10 @@
    rosa fucsia sobre blush, tipografías Cormorant + Montserrat y el
    wordmark en Sacramento. Este proyecto es independiente: solo se
    comparte el lenguaje visual, ningún código ni dato.
+
+   El diseño se construye MOBILE FIRST: los valores base corresponden a
+   pantallas de 320 a 430 px y los breakpoints amplían para tablet y
+   escritorio.
    ------------------------------------------------------------------ */
 @theme {
   /* Fondos */
@@ -39,11 +43,13 @@
   --font-script: var(--font-sacramento), 'Sacramento', cursive;
 
   /* Formas y sombras */
-  --radius-card: 1.75rem;
+  --radius-card: 1.5rem;
+  --radius-sheet: 1.75rem;
   --radius-pill: 999px;
   --shadow-soft: 0 10px 40px -14px rgba(190, 30, 110, 0.18);
-  --shadow-glow: 0 20px 55px -20px rgba(237, 42, 140, 0.4);
-  --shadow-card: 0 26px 60px -30px rgba(42, 22, 34, 0.2);
+  --shadow-glow: 0 14px 34px -14px rgba(237, 42, 140, 0.45);
+  --shadow-card: 0 18px 44px -28px rgba(42, 22, 34, 0.22);
+  --shadow-bar: 0 -10px 30px -22px rgba(42, 22, 34, 0.35);
 }
 
 @layer base {
@@ -53,18 +59,30 @@
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 88px;
+    /* Encabezado móvil (56 px) + aire */
+    scroll-padding-top: 76px;
     -webkit-text-size-adjust: 100%;
+    /* Evita el rebote elástico horizontal en iOS. */
+    overscroll-behavior-x: none;
   }
 
   body {
     background-color: var(--color-shell);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    font-size: 1.0625rem;
-    line-height: 1.65;
+    /* 16 px reales en móvil: legible y sin zoom automático. */
+    font-size: 1rem;
+    line-height: 1.6;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: rgba(237, 42, 140, 0.12);
+  }
+
+  @media (min-width: 768px) {
+    body {
+      font-size: 1.0625rem;
+      line-height: 1.65;
+    }
   }
 
   h1,
@@ -72,8 +90,13 @@
   h3 {
     font-family: var(--font-serif);
     font-weight: 600;
-    line-height: 1.12;
+    line-height: 1.14;
     letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   :focus-visible {
@@ -87,11 +110,53 @@
     color: #5e0935;
   }
 
-  /* Evita el zoom automático de iOS al enfocar un campo. */
+  /* Nunca menos de 16 px: iOS hace zoom automático por debajo de ese tamaño. */
   input,
   select,
   textarea {
     font-size: max(1rem, 16px);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Áreas seguras y contenedor móvil
+   ------------------------------------------------------------------ */
+
+/* Márgenes laterales cómodos (18 px) que además respetan el notch. */
+.px-gutter {
+  padding-left: max(1.125rem, env(safe-area-inset-left));
+  padding-right: max(1.125rem, env(safe-area-inset-right));
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Espacio inferior para que la barra fija nunca tape el contenido. */
+.pb-action-bar {
+  padding-bottom: calc(6.5rem + env(safe-area-inset-bottom));
+}
+
+/* Contenedor de lectura: una sola columna, ancho cómodo en móvil. */
+.app-shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 34rem;
+}
+
+@media (min-width: 768px) {
+  .app-shell-wide {
+    max-width: 56rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-shell-wide {
+    max-width: 72rem;
   }
 }
 
@@ -107,7 +172,7 @@
 }
 
 .bg-blush-radial {
-  background-image: radial-gradient(60% 60% at 50% 0%, #ffe1f0 0%, #fff6fa 70%);
+  background-image: radial-gradient(80% 60% at 50% 0%, #ffe1f0 0%, #fff6fa 70%);
 }
 
 .gradient-text {
@@ -128,6 +193,71 @@
   );
 }
 
+/* ------------------------------------------------------------------
+   Acordeones nativos (<details>): cero JavaScript, táctiles y accesibles
+   ------------------------------------------------------------------ */
+.accordion summary {
+  list-style: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion[open] summary .accordion-chevron {
+  transform: rotate(180deg);
+}
+
+.accordion-chevron {
+  transition: transform 0.25s ease;
+}
+
+/* ------------------------------------------------------------------
+   Animaciones discretas
+   ------------------------------------------------------------------ */
+@keyframes alma-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes alma-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes alma-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.alma-fade-up {
+  animation: alma-fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.alma-slide-up {
+  animation: alma-slide-up 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.alma-fade-in {
+  animation: alma-fade-in 0.25s ease both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -142,37 +272,7 @@
   }
 }
 
-/* Aparición suave de los bloques de contenido. */
-@keyframes alma-fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes alma-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-12px);
-  }
-}
-
-.alma-fade-up {
-  animation: alma-fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.alma-float {
-  animation: alma-float 7s ease-in-out infinite;
-}
-
-/* Barra de desplazamiento discreta para las pestañas móviles. */
+/* Barra de desplazamiento discreta para las pestañas y carruseles. */
 .scrollbar-thin {
   scrollbar-width: thin;
   scrollbar-color: var(--color-line) transparent;
@@ -214,17 +314,18 @@
     display: block !important;
   }
 
-  /* En papel se muestran todas las pestañas de recomendaciones. */
-  [data-print-expand] [hidden] {
+  /* En papel se despliegan todos los acordeones. */
+  details > *:not(summary) {
     display: block !important;
   }
 
-  [data-print-tablist] {
+  .accordion-chevron {
     display: none !important;
   }
 
   .alma-fade-up,
-  .alma-float {
+  .alma-slide-up,
+  .alma-fade-in {
     animation: none !important;
   }
 

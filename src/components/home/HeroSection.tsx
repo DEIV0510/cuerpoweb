@@ -24,25 +24,25 @@ export function HeroSection() {
         className="pointer-events-none absolute -left-40 top-56 h-[24rem] w-[24rem] rounded-full bg-brand-soft/60 blur-3xl"
       />
 
-      <div className="relative mx-auto grid w-full max-w-6xl gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
-        <div className="alma-fade-up flex flex-col gap-6">
+      <div className="app-shell app-shell-wide relative grid gap-10 px-gutter py-10 sm:py-16 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-12">
+        <div className="alma-fade-up flex flex-col gap-5">
           <span className="inline-flex w-fit items-center gap-2 rounded-full border border-sand bg-surface/70 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-dark backdrop-blur">
             <Sparkles aria-hidden="true" className="h-3.5 w-3.5" />
             {SITE.brand} · {SITE.product}
           </span>
 
-          <h1 className="text-[2.6rem] leading-[1.08] sm:text-[3.4rem]">
+          <h1 className="text-[2rem] leading-[1.1] sm:text-[2.8rem] lg:text-[3.4rem]">
             Descubre las prendas que{' '}
             <span className="gradient-text italic">mejor acompañan</span> tu silueta
           </h1>
 
-          <p className="max-w-xl text-lg leading-relaxed text-muted">
+          <p className="max-w-xl leading-relaxed text-muted sm:text-lg">
             Ingresa tres medidas y recibe una guía personalizada de cortes, escotes,
             prendas y detalles que ayudan a crear equilibrio visual y potenciar tu
             estilo.
           </p>
 
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-col gap-2.5 sm:flex-row">
             <Link href="/analisis" className={buttonClasses('primary', 'lg', 'w-full sm:w-auto')}>
               Descubrir mi silueta
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
@@ -66,7 +66,7 @@ export function HeroSection() {
         </div>
 
         <div className="relative mx-auto w-full max-w-md">
-          <div className="relative overflow-hidden rounded-[2rem] border border-sand bg-gradient-to-br from-blush via-brand-soft to-sand p-7 shadow-card sm:p-8">
+          <div className="relative overflow-hidden rounded-card border border-sand bg-gradient-to-br from-blush via-brand-soft to-sand p-5 shadow-card sm:p-7">
             <div
               aria-hidden="true"
               className="absolute inset-0 [background:radial-gradient(120%_90%_at_100%_0%,rgba(255,255,255,.65),transparent_45%)]"

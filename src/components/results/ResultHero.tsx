@@ -1,4 +1,4 @@
-﻿import { SilhouetteIllustration } from '@/components/ui/SilhouetteIllustration';
+import { SilhouetteIllustration } from '@/components/ui/SilhouetteIllustration';
 import { getBodyShapeProfile } from '@/data/body-shapes';
 import { formatCm } from '@/lib/body-shape/calculations';
 import { formatLongDate } from '@/lib/utils';
@@ -9,63 +9,61 @@ interface ResultHeroProps {
   createdAt: string;
 }
 
-/** Encabezado del resultado: silueta, resumen y medidas registradas. */
+/** Primera pantalla del resultado: silueta, nombre y resumen breve. */
 export function ResultHero({ result, createdAt }: ResultHeroProps) {
   const profile = getBodyShapeProfile(result.type);
   const { bust, waist, hips } = result.measurements;
 
+  const chips = [
+    { label: 'Busto', value: bust },
+    { label: 'Cintura', value: waist },
+    { label: 'Cadera', value: hips },
+  ];
+
   return (
     <section
       aria-labelledby="titulo-resultado"
-      className="rounded-card border border-line bg-surface p-6 sm:p-8"
+      className="bg-blush-radial rounded-card border border-line px-5 py-7 text-center sm:px-8 sm:py-9"
     >
-      <div className="flex flex-col gap-8 sm:flex-row sm:items-start">
-        <div className="mx-auto w-32 shrink-0 sm:mx-0 sm:w-36">
-          <SilhouetteIllustration
-            proportions={profile.illustration}
-            title={`Ilustración de la silueta ${profile.name}`}
-          />
-        </div>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.34em] text-brand-dark">
+        Tu silueta predominante es
+      </p>
 
-        <div className="flex-1">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.34em] text-brand-dark">
-            Tu silueta predominante es
-          </p>
-          <h1 id="titulo-resultado" className="mt-2 text-4xl sm:text-5xl">
-            {profile.name}
-          </h1>
-          {profile.alternativeName ? (
-            <p className="mt-1 text-sm text-muted">
-              También conocida como {profile.alternativeName.toLowerCase()}.
-            </p>
-          ) : null}
+      <h1 id="titulo-resultado" className="mt-2 text-[2.4rem] leading-none sm:text-5xl">
+        {profile.name}
+      </h1>
 
-          <p className="mt-4 text-lg text-ink">{result.explanation}</p>
-
-          <dl className="mt-6 flex flex-wrap gap-2">
-            {[
-              { label: 'Busto', value: bust },
-              { label: 'Cintura', value: waist },
-              { label: 'Cadera', value: hips },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="flex items-baseline gap-2 rounded-full border border-line bg-shell px-4 py-2"
-              >
-                <dt className="text-sm text-muted">{item.label}</dt>
-                <dd className="font-semibold text-ink">{formatCm(item.value)} cm</dd>
-              </div>
-            ))}
-          </dl>
-
-          <p className="mt-4 text-sm text-muted">
-            Análisis realizado el {formatLongDate(createdAt)}.
-          </p>
-        </div>
+      <div className="mx-auto mt-5 w-28 sm:w-32">
+        <SilhouetteIllustration
+          proportions={profile.illustration}
+          title={`Ilustración de la silueta ${profile.name}`}
+        />
       </div>
 
+      <p className="mx-auto mt-5 max-w-sm text-[1.05rem] text-muted">
+        {profile.tagline}
+      </p>
+
+      <dl className="mt-5 flex flex-wrap justify-center gap-2">
+        {chips.map((chip) => (
+          <div
+            key={chip.label}
+            className="flex items-baseline gap-1.5 rounded-full border border-line bg-surface px-3.5 py-2"
+          >
+            <dt className="text-xs text-faint">{chip.label}</dt>
+            <dd className="text-sm font-semibold tabular-nums text-ink">
+              {formatCm(chip.value)} cm
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <p className="mt-4 text-xs text-faint">
+        Análisis del {formatLongDate(createdAt)}
+      </p>
+
       {result.warnings.length > 0 ? (
-        <div className="mt-6 rounded-2xl border border-brand-soft bg-brand-soft/25 p-4 text-[0.95rem] text-brand-dark">
+        <div className="mt-5 rounded-2xl border border-sand bg-surface/80 p-4 text-left text-sm text-brand-dark">
           <p className="font-semibold">Ten en cuenta</p>
           <ul className="mt-2 flex flex-col gap-2">
             {result.warnings.map((warning) => (

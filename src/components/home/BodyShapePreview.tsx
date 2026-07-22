@@ -1,4 +1,4 @@
-import { SectionHeading } from '@/components/ui/Card';
+﻿import { SectionHeading } from '@/components/ui/Card';
 import { SilhouetteIllustration } from '@/components/ui/SilhouetteIllustration';
 import { BODY_SHAPE_LIST } from '@/data/body-shapes';
 
@@ -6,7 +6,7 @@ import { BODY_SHAPE_LIST } from '@/data/body-shapes';
 export function BodyShapePreview() {
   return (
     <section className="border-y border-line bg-surface">
-      <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+      <div className="app-shell app-shell-wide px-gutter py-12 sm:py-16">
         <SectionHeading
           eyebrow="Las cinco siluetas"
           title="Categorías orientativas, no etiquetas"

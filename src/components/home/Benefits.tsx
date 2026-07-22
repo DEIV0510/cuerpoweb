@@ -1,4 +1,4 @@
-import {
+﻿import {
   Compass,
   HeartHandshake,
   Layers,
@@ -50,7 +50,7 @@ const BENEFITS = [
 /** Beneficios del análisis. */
 export function Benefits() {
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+    <section className="app-shell app-shell-wide px-gutter py-12 sm:py-16">
       <SectionHeading
         eyebrow="Para qué sirve"
         title="Lo que te llevas del análisis"

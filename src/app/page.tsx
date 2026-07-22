@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { HeroSection } from '@/components/home/HeroSection';
 import { ProcessSteps } from '@/components/home/ProcessSteps';
@@ -18,14 +18,14 @@ export default function HomePage() {
       <BodyShapePreview />
       <Benefits />
 
-      <section className="mx-auto w-full max-w-6xl px-4 pb-4 sm:px-6">
+      <section className="app-shell app-shell-wide px-gutter pb-4">
         <PrivacyNotice />
       </section>
 
       <Faq items={FAQS} />
 
       <section className="bg-brand-gradient text-white">
-        <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-4 py-16 text-center sm:px-6 sm:py-20">
+        <div className="app-shell flex flex-col items-center gap-5 px-gutter py-12 text-center sm:py-16">
           <p className="font-script text-5xl leading-none text-brand-soft">
             Es momento
           </p>

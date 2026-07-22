@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -31,7 +31,7 @@ export default function PrivacidadPage() {
         description="Esta herramienta está pensada para funcionar sin cuentas, sin servidores y sin recopilar información personal."
       />
 
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-12 sm:px-6 sm:py-16">
+      <div className="app-shell flex flex-col gap-4 px-gutter py-8 sm:py-12">
         <section
           aria-labelledby="que-guardamos"
           className="rounded-card border border-line bg-surface p-6 sm:p-8"
@@ -101,11 +101,11 @@ export default function PrivacidadPage() {
           </p>
         </section>
 
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Link href="/analisis" className={buttonClasses('primary', 'lg')}>
+        <div className="flex flex-col gap-2.5 sm:flex-row">
+          <Link href="/analisis" className={buttonClasses('primary', 'lg', 'w-full sm:w-auto')}>
             Realizar mi análisis
           </Link>
-          <Link href="/metodologia" className={buttonClasses('secondary', 'lg')}>
+          <Link href="/metodologia" className={buttonClasses('ghost', 'lg', 'w-full sm:w-auto')}>
             Ver la metodología
           </Link>
         </div>

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { SilhouetteIllustration } from '@/components/ui/SilhouetteIllustration';
@@ -85,7 +85,7 @@ export default function MetodologiaPage() {
         description="El resultado no viene de una inteligencia artificial ni de una base de datos externa: es una comparación matemática entre tres medidas, con reglas fijas y públicas."
       />
 
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-10 px-4 py-12 sm:px-6 sm:py-16">
+      <div className="app-shell app-shell-wide flex flex-col gap-8 px-gutter py-8 sm:py-12">
         <section
           aria-labelledby="medidas-usadas"
           className="rounded-card border border-line bg-surface p-6 sm:p-8"
@@ -189,33 +189,38 @@ export default function MetodologiaPage() {
           <h2 id="ejemplos" className="text-2xl">
             Ejemplos de clasificación
           </h2>
-          <div className="mt-5 overflow-x-auto rounded-card border border-line bg-surface">
-            <table className="w-full min-w-[520px] border-collapse text-left">
-              <caption className="sr-only">
-                Ejemplos de medidas y la silueta que devuelve el algoritmo
-              </caption>
-              <thead>
-                <tr className="border-b border-line text-sm text-muted">
-                  <th scope="col" className="px-5 py-3 font-medium">Busto</th>
-                  <th scope="col" className="px-5 py-3 font-medium">Cintura</th>
-                  <th scope="col" className="px-5 py-3 font-medium">Cadera</th>
-                  <th scope="col" className="px-5 py-3 font-medium">Resultado</th>
-                </tr>
-              </thead>
-              <tbody>
-                {EXAMPLES.map((example) => (
-                  <tr key={example.result} className="border-b border-line last:border-0">
-                    <td className="px-5 py-3">{example.bust} cm</td>
-                    <td className="px-5 py-3">{example.waist} cm</td>
-                    <td className="px-5 py-3">{example.hips} cm</td>
-                    <td className="px-5 py-3 font-medium text-brand-dark">
-                      {example.result}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <p className="mt-2 text-muted">
+            Cada combinación entrega siempre el mismo resultado.
+          </p>
+
+          {/* Sin tablas anchas: cada ejemplo es una tarjeta legible en móvil. */}
+          <ul className="mt-5 flex flex-col gap-3">
+            {EXAMPLES.map((example) => (
+              <li
+                key={example.result}
+                className="rounded-card border border-line bg-surface p-4"
+              >
+                <p className="font-medium text-brand-dark">{example.result}</p>
+                <dl className="mt-2 flex flex-wrap gap-2">
+                  {[
+                    { label: 'Busto', value: example.bust },
+                    { label: 'Cintura', value: example.waist },
+                    { label: 'Cadera', value: example.hips },
+                  ].map((item) => (
+                    <div
+                      key={item.label}
+                      className="flex items-baseline gap-1.5 rounded-full bg-shell px-3 py-1.5"
+                    >
+                      <dt className="text-xs text-faint">{item.label}</dt>
+                      <dd className="text-sm font-semibold tabular-nums text-ink">
+                        {item.value} cm
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section aria-labelledby="siluetas-resumen">
@@ -266,11 +271,11 @@ export default function MetodologiaPage() {
           </p>
         </section>
 
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Link href="/analisis" className={buttonClasses('primary', 'lg')}>
+        <div className="flex flex-col gap-2.5 sm:flex-row">
+          <Link href="/analisis" className={buttonClasses('primary', 'lg', 'w-full sm:w-auto')}>
             Realizar mi análisis
           </Link>
-          <Link href="/privacidad" className={buttonClasses('secondary', 'lg')}>
+          <Link href="/privacidad" className={buttonClasses('ghost', 'lg', 'w-full sm:w-auto')}>
             Ver privacidad y datos
           </Link>
         </div>

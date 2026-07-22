@@ -2,14 +2,15 @@
 
 import { useMemo, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ClipboardList } from 'lucide-react';
+import { ArrowDown, ArrowRight, ClipboardList } from 'lucide-react';
 import { ResultHero } from '@/components/results/ResultHero';
 import { MeasurementComparison } from '@/components/results/MeasurementComparison';
 import { RuleExplanation } from '@/components/results/RuleExplanation';
 import { VisualObjectiveCard } from '@/components/results/VisualObjectiveCard';
-import { RecommendationTabs } from '@/components/results/RecommendationTabs';
+import { RecommendationAccordion } from '@/components/results/RecommendationAccordion';
 import { OutfitCard } from '@/components/results/OutfitCard';
 import { ResultActions } from '@/components/results/ResultActions';
+import { Accordion } from '@/components/ui/Accordion';
 import { buttonClasses } from '@/components/ui/Button';
 import { SITE } from '@/data/navigation';
 import {
@@ -44,7 +45,7 @@ export function ResultView() {
 
   if (raw === PENDING) {
     return (
-      <div className="mx-auto w-full max-w-3xl px-4 py-20 sm:px-6">
+      <div className="app-shell px-gutter py-20">
         <p aria-live="polite" className="text-center text-muted">
           Cargando tu resultado…
         </p>
@@ -54,23 +55,25 @@ export function ResultView() {
 
   if (!analysis) {
     return (
-      <div className="mx-auto w-full max-w-2xl px-4 py-16 sm:px-6 sm:py-24">
-        <div className="flex flex-col items-center gap-5 rounded-card border border-line bg-surface p-8 text-center sm:p-12">
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-soft/60">
+      <div className="app-shell px-gutter py-12 sm:py-20">
+        <div className="flex flex-col items-center gap-5 rounded-card border border-line bg-surface px-6 py-10 text-center">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-soft">
             <ClipboardList aria-hidden="true" className="h-6 w-6 text-brand-dark" />
           </span>
-          <h1 className="text-3xl sm:text-4xl">Todavía no hay un resultado</h1>
-          <p className="max-w-md text-muted">
+          <h1 className="text-3xl">Todavía no hay un resultado</h1>
+          <p className="max-w-sm text-muted">
             Para ver tu silueta necesitamos tres medidas: busto, cintura y cadera.
-            El análisis toma menos de un minuto y se calcula en tu propio
-            dispositivo.
+            El análisis toma unos minutos y se calcula en tu propio teléfono.
           </p>
-          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-            <Link href="/analisis" className={buttonClasses('primary', 'lg')}>
+          <div className="flex w-full flex-col gap-2.5">
+            <Link href="/analisis" className={buttonClasses('primary', 'lg', 'w-full')}>
               Realizar mi análisis
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Link>
-            <Link href="/como-medirse" className={buttonClasses('secondary', 'lg')}>
+            <Link
+              href="/como-medirse"
+              className={buttonClasses('ghost', 'lg', 'w-full')}
+            >
               Ver cómo medirme
             </Link>
           </div>
@@ -82,7 +85,7 @@ export function ResultView() {
   const { result, createdAt } = analysis;
 
   return (
-    <div className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-4 py-10 sm:px-6 sm:py-14">
+    <div className="app-shell flex flex-col gap-4 px-gutter py-5 sm:gap-5 sm:py-8">
       <header className="print-only">
         <p className="font-script text-3xl">{SITE.brand}</p>
         <p className="text-sm">
@@ -91,42 +94,68 @@ export function ResultView() {
         <hr className="mt-3" />
       </header>
 
+      {/* 1 · Resumen de la silueta */}
       <div className="alma-fade-up">
         <ResultHero result={result} createdAt={createdAt} />
       </div>
 
-      <ResultActions result={result} />
+      <a
+        href="#recomendaciones"
+        className={buttonClasses('primary', 'lg', 'no-print w-full')}
+      >
+        Ver mis recomendaciones
+        <ArrowDown aria-hidden="true" className="h-4 w-4" />
+      </a>
 
+      {/* 2 · Por qué obtuviste este resultado */}
+      <Accordion title="Por qué obtuviste este resultado" defaultOpen>
+        <RuleExplanation result={result} />
+      </Accordion>
+
+      {/* 3 · Comparación de medidas */}
+      <Accordion title="Comparación de tus medidas">
+        <MeasurementComparison result={result} />
+      </Accordion>
+
+      {/* 4 · Objetivo visual */}
       <VisualObjectiveCard result={result} />
 
-      <MeasurementComparison result={result} />
+      {/* 5 a 12 · Recomendaciones por categoría */}
+      <div id="recomendaciones" className="scroll-mt-20 pt-2">
+        <RecommendationAccordion recommendations={result.recommendations} />
+      </div>
 
-      <RuleExplanation result={result} />
-
-      <RecommendationTabs recommendations={result.recommendations} />
-
-      <section aria-labelledby="titulo-outfits">
+      {/* 13 · Outfits completos */}
+      <section aria-labelledby="titulo-outfits" className="pt-2">
         <h2 id="titulo-outfits" className="text-2xl">
-          Ejemplos de outfits completos
+          Outfits completos
         </h2>
-        <p className="mt-2 text-[0.95rem] text-muted">
+        <p className="mt-1.5 text-[0.95rem] text-muted">
           Tres combinaciones para distintos momentos, pensadas para tu silueta.
         </p>
-        <div className="mt-5 grid gap-5 md:grid-cols-3">
+        <div className="mt-4 flex flex-col gap-3">
           {result.recommendations.outfitExamples.map((outfit) => (
             <OutfitCard key={outfit.name} outfit={outfit} />
           ))}
         </div>
       </section>
 
-      <section
-        aria-labelledby="cierre-resultado"
-        className="rounded-card border border-line bg-surface p-6 sm:p-7"
-      >
-        <h2 id="cierre-resultado" className="text-2xl">
-          Cómo usar esta guía
+      {/* 14 · Imprimir, guardar o compartir */}
+      <section aria-labelledby="titulo-acciones" className="pt-2">
+        <h2 id="titulo-acciones" className="text-2xl">
+          Guarda tu guía
         </h2>
-        <ul className="mt-4 flex flex-col gap-3 text-[0.95rem] text-muted">
+        <p className="mt-1.5 text-[0.95rem] text-muted">
+          Llévala contigo cuando vayas de compras o vuelve cuando quieras: queda
+          guardada en este dispositivo.
+        </p>
+        <div className="mt-4">
+          <ResultActions result={result} />
+        </div>
+      </section>
+
+      <Accordion title="Cómo usar esta guía">
+        <ul className="flex flex-col gap-3 text-[0.95rem] text-muted">
           <li>
             Empieza por una sola categoría. Aplicar dos o tres ideas ya cambia la
             forma en que se ve un conjunto.
@@ -136,13 +165,12 @@ export function ResultView() {
             ambas: son orientaciones, no reglas rígidas.
           </li>
           <li>
-            Guarda o imprime esta ficha y llévala contigo cuando vayas de compras.
+            Repite el análisis cuando quieras; cada resultado reemplaza al anterior
+            en tu dispositivo.
           </li>
         </ul>
-        <p className="mt-5 text-sm text-muted">{SITE.disclaimer}</p>
-      </section>
-
-      <ResultActions result={result} />
+        <p className="mt-4 text-sm text-faint">{SITE.disclaimer}</p>
+      </Accordion>
     </div>
   );
 }

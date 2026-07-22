@@ -3,6 +3,9 @@ import type { BodyShapeResult, StoredAnalysis } from '@/types/body-shape';
 /** Clave única de esta aplicación en localStorage. */
 export const STORAGE_KEY = 'alma-silueta-corporal:last-analysis';
 
+/** Clave del progreso temporal del formulario. */
+export const DRAFT_KEY = 'alma-silueta-corporal:draft';
+
 /** Versión del formato guardado. Permite descartar datos antiguos. */
 export const STORAGE_VERSION = 1;
 
@@ -88,6 +91,74 @@ export function loadAnalysis(): StoredAnalysis | null {
   return parseStoredAnalysis(readRawAnalysis());
 }
 
+/** Progreso temporal del formulario, para no perder lo escrito. */
+export interface MeasurementDraft {
+  /** Índice del paso en el que quedó la persona. */
+  step: number;
+  values: {
+    bust: string;
+    waist: string;
+    hips: string;
+    height: string;
+  };
+}
+
+function isDraft(value: unknown): value is MeasurementDraft {
+  if (typeof value !== 'object' || value === null) return false;
+
+  const candidate = value as Partial<MeasurementDraft>;
+  if (typeof candidate.step !== 'number') return false;
+  if (!candidate.values || typeof candidate.values !== 'object') return false;
+
+  const { bust, waist, hips, height } = candidate.values;
+  return [bust, waist, hips, height].every((item) => typeof item === 'string');
+}
+
+/** Lee el borrador tal cual está guardado (snapshot estable para React). */
+export function readRawDraft(): string | null {
+  if (!isBrowser()) return null;
+
+  try {
+    return window.localStorage.getItem(DRAFT_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/** Convierte el texto guardado en un borrador válido, o en null. */
+export function parseDraft(raw: string | null): MeasurementDraft | null {
+  if (!raw) return null;
+
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return isDraft(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Guarda el progreso del formulario. Nunca lanza errores. */
+export function saveDraft(draft: MeasurementDraft): void {
+  if (!isBrowser()) return;
+
+  try {
+    window.localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  } catch {
+    // Sin almacenamiento disponible: el formulario sigue funcionando.
+  }
+}
+
+/** Elimina el progreso temporal del formulario. */
+export function clearDraft(): void {
+  if (!isBrowser()) return;
+
+  try {
+    window.localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    // Nada que hacer.
+  }
+}
+
 /**
  * Se suscribe a los cambios del análisis guardado, tanto en esta pestaña como
  * en otras pestañas del mismo navegador.
@@ -117,8 +188,11 @@ export function clearAnalysis(): boolean {
   if (!isBrowser()) return false;
 
   try {
-    const existed = window.localStorage.getItem(STORAGE_KEY) !== null;
+    const existed =
+      window.localStorage.getItem(STORAGE_KEY) !== null ||
+      window.localStorage.getItem(DRAFT_KEY) !== null;
     window.localStorage.removeItem(STORAGE_KEY);
+    window.localStorage.removeItem(DRAFT_KEY);
     notifyChange();
     return existed;
   } catch {

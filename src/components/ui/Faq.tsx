@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+﻿import { Plus } from 'lucide-react';
 import type { Faq as FaqItem } from '@/data/faqs';
 import { SectionHeading } from '@/components/ui/Card';
 
@@ -18,7 +18,7 @@ export function Faq({
   title = 'Antes de empezar',
 }: FaqProps) {
   return (
-    <section className="mx-auto w-full max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
+    <section className="app-shell px-gutter py-12 sm:py-16">
       <SectionHeading eyebrow={eyebrow} title={title} />
 
       <div className="mt-8 flex flex-col gap-3">

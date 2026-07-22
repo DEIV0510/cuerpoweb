@@ -1,16 +1,25 @@
-﻿import Link from 'next/link';
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { FOOTER_NAV, SITE } from '@/data/navigation';
 import { ALGORITHM_VERSION } from '@/lib/body-shape/classify-body-shape';
 
-/** Pie de página con enlaces reales y aviso de alcance. */
+/** Rutas sin pie de página: el flujo de análisis ocupa toda la pantalla. */
+const HIDDEN_ON = ['/analisis'];
+
+/** Pie de página compacto en móvil y en dos columnas desde tablet. */
 export function Footer() {
+  const pathname = usePathname() ?? '/';
   const year = new Date().getFullYear();
+
+  if (HIDDEN_ON.includes(pathname)) return null;
 
   return (
     <footer className="no-print border-t border-line bg-surface">
-      <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-[1.3fr_1fr]">
+      <div className="app-shell app-shell-wide grid gap-8 px-gutter py-10 md:grid-cols-[1.3fr_1fr] md:py-12">
         <div className="flex flex-col gap-3">
-          <span className="font-script text-4xl leading-none text-brand-deep">
+          <span className="font-script text-3xl leading-none text-brand-deep">
             {SITE.brand}
           </span>
           <p className="max-w-md text-sm text-muted">{SITE.description}</p>
@@ -21,12 +30,12 @@ export function Footer() {
           <h2 className="text-[11px] font-semibold uppercase tracking-[0.34em] text-brand-dark">
             Secciones
           </h2>
-          <ul className="mt-4 flex flex-col gap-2">
+          <ul className="mt-3 flex flex-col">
             {FOOTER_NAV.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="inline-flex min-h-11 items-center text-sm text-muted transition-colors hover:text-brand-dark"
+                  className="inline-flex min-h-12 items-center text-[0.95rem] text-muted transition-colors hover:text-brand-dark"
                 >
                   {link.label}
                 </Link>
@@ -37,11 +46,11 @@ export function Footer() {
       </div>
 
       <div className="border-t border-line">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <div className="app-shell app-shell-wide flex flex-col gap-1.5 px-gutter py-5 pb-safe text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {SITE.brand}. Todos los derechos reservados.
           </p>
-          <p>Algoritmo de clasificación versión {ALGORITHM_VERSION}</p>
+          <p>Algoritmo versión {ALGORITHM_VERSION}</p>
         </div>
       </div>
     </footer>

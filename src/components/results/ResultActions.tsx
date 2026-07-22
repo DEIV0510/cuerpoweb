@@ -44,10 +44,10 @@ export function ResultActions({ result }: ResultActionsProps) {
 
   return (
     <div className="no-print flex flex-col gap-3">
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <Button onClick={handleRestart} size="lg" className="w-full sm:w-auto">
-          <RotateCcw aria-hidden="true" className="h-4 w-4" />
-          Realizar otro análisis
+      <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
+        <Button onClick={handleShare} size="lg" className="w-full sm:w-auto">
+          <Share2 aria-hidden="true" className="h-4 w-4" />
+          Compartir resumen
         </Button>
 
         <Button
@@ -61,13 +61,13 @@ export function ResultActions({ result }: ResultActionsProps) {
         </Button>
 
         <Button
-          variant="secondary"
+          variant="ghost"
           size="lg"
-          onClick={handleShare}
+          onClick={handleRestart}
           className="w-full sm:w-auto"
         >
-          <Share2 aria-hidden="true" className="h-4 w-4" />
-          Compartir resumen
+          <RotateCcw aria-hidden="true" className="h-4 w-4" />
+          Realizar otro análisis
         </Button>
       </div>
 
