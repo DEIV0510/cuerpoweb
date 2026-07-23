@@ -1,6 +1,5 @@
 'use client';
 
-import { useMemo, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { ArrowDown, ArrowRight, ClipboardList } from 'lucide-react';
 import { ResultHero } from '@/components/results/ResultHero';
@@ -10,41 +9,18 @@ import { VisualObjectiveCard } from '@/components/results/VisualObjectiveCard';
 import { RecommendationAccordion } from '@/components/results/RecommendationAccordion';
 import { OutfitCard } from '@/components/results/OutfitCard';
 import { ResultActions } from '@/components/results/ResultActions';
-import { ProportionsTeaser } from '@/components/results/ProportionsTeaser';
+import { CombinedGuideSection } from '@/components/style-guide/CombinedGuideSection';
+import { useCombinedGuide } from '@/components/style-guide/use-combined-guide';
 import { Accordion } from '@/components/ui/Accordion';
 import { buttonClasses } from '@/components/ui/Button';
 import { SITE } from '@/data/navigation';
-import {
-  parseStoredAnalysis,
-  readRawAnalysis,
-  subscribeToAnalysis,
-} from '@/lib/storage';
 import { formatLongDate } from '@/lib/utils';
-
-/**
- * Valor devuelto durante el renderizado en servidor y en la hidratación.
- * Permite mostrar un estado de carga sin provocar diferencias de hidratación.
- */
-const PENDING = '__pendiente__';
-
-function getServerSnapshot(): string {
-  return PENDING;
-}
 
 /** Vista del último análisis guardado en el dispositivo. */
 export function ResultView() {
-  const raw = useSyncExternalStore(
-    subscribeToAnalysis,
-    readRawAnalysis,
-    getServerSnapshot,
-  );
+  const { pending, analysis, guide } = useCombinedGuide();
 
-  const analysis = useMemo(
-    () => (raw === PENDING ? null : parseStoredAnalysis(raw)),
-    [raw],
-  );
-
-  if (raw === PENDING) {
+  if (pending) {
     return (
       <div className="app-shell px-gutter py-20">
         <p aria-live="polite" className="text-center text-muted">
@@ -121,8 +97,8 @@ export function ResultView() {
       {/* 4 · Objetivo visual */}
       <VisualObjectiveCard result={result} />
 
-      {/* Proporción vertical: el análisis complementario */}
-      <ProportionsTeaser />
+      {/* Fórmula personal: cruce con la proporción vertical */}
+      <CombinedGuideSection from="shape" />
 
       {/* 5 a 12 · Recomendaciones por categoría */}
       <div id="recomendaciones" className="scroll-mt-20 pt-2">
@@ -138,8 +114,12 @@ export function ResultView() {
           Tres combinaciones para distintos momentos, pensadas para tu silueta.
         </p>
         <div className="mt-4 flex flex-col gap-3">
-          {result.recommendations.outfitExamples.map((outfit) => (
-            <OutfitCard key={outfit.name} outfit={outfit} />
+          {result.recommendations.outfitExamples.map((outfit, index) => (
+            <OutfitCard
+              key={outfit.name}
+              outfit={outfit}
+              verticalAdjustment={guide?.outfits[index]?.verticalAdjustment}
+            />
           ))}
         </div>
       </section>

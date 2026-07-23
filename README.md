@@ -8,6 +8,10 @@ Incluye además la **técnica de las 8 cabezas**, que analiza la proporción
 vertical (torso, tiro y piernas) para saber qué tiro de pantalón, largo de
 chaqueta y altura de zapato acompañan mejor a cada persona.
 
+Cuando los dos análisis están hechos, la aplicación los cruza en una **fórmula
+personal**: seis decisiones concretas de vestuario más las reglas escritas para
+esa combinación exacta.
+
 Está diseñada **mobile first**: es una aplicación para el teléfono que además se
 adapta a tablet y escritorio, no una página de escritorio reducida. Puede
 instalarse desde el navegador como PWA.
@@ -191,6 +195,36 @@ horizontal, sin textos cortados y con áreas táctiles de 44 px o más.
 Para instalarla: abre la aplicación en Chrome (Android) y elige **Añadir a la
 pantalla de inicio**; en iPhone, desde Safari, **Compartir → Añadir a inicio**.
 Requiere HTTPS, así que funciona en el dominio publicado (o en `localhost`).
+
+---
+
+## La fórmula personal (guía combinada)
+
+Cuando los **dos análisis** están hechos, la aplicación los cruza en una sola
+guía. La silueta dice *qué* cortes acompañan tus contornos; la proporción
+vertical dice *a qué altura* ponerlos.
+
+El cruce produce seis decisiones concretas, calculadas con reglas fijas:
+
+| Decisión | De dónde sale |
+| --- | --- |
+| Tiro del pantalón | Estrategia vertical, corregida si tu tiro es corto o largo |
+| Blusa por dentro o por fuera | Estrategia vertical, con excepción para la silueta óvalo |
+| Largo de chaqueta | Largo del torso, y de las piernas si el torso está en proporción |
+| Altura del zapato | Largo de las piernas |
+| Escote | Silueta, cambiando a su alternativa vertical si el torso es corto |
+| Punto focal | Silueta |
+
+Además añade las reglas escritas para esa pareja concreta (5 siluetas × 3
+estrategias = 15 combinaciones) y aporta a cada outfit su **ajuste vertical**.
+
+Ejemplo real: *reloj de arena* + *subir la cintura* → tiro alto, blusa por
+dentro, chaqueta corta a la cintura, zapato con altura en tono continuo, escote
+en V suave y punto focal en la cintura.
+
+La fórmula aparece en `/resultado` y en `/proporciones/resultado`; si falta uno
+de los dos análisis, cada página invita a completarlo. La lógica está en
+`src/lib/style-guide/combined-guide.ts` con 31 pruebas unitarias.
 
 ---
 
@@ -397,6 +431,9 @@ src/
 │   ├── proportions/
 │   │   ├── eight-heads.ts            # Técnica de las 8 cabezas
 │   │   └── eight-heads.test.ts       # Pruebas de la proporción vertical
+│   ├── style-guide/
+│   │   ├── combined-guide.ts         # Cruce silueta + proporción vertical
+│   │   └── combined-guide.test.ts    # Pruebas de la fórmula personal
 │   ├── storage.ts              # localStorage (guardar, leer, borrar)
 │   ├── share.ts                # Web Share API con respaldo al portapapeles
 │   └── utils.ts

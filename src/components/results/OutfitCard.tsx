@@ -3,6 +3,8 @@ import type { OutfitExample } from '@/types/body-shape';
 
 interface OutfitCardProps {
   outfit: OutfitExample;
+  /** Ajuste que aporta la proporción vertical, si ya se calculó. */
+  verticalAdjustment?: string;
 }
 
 const PIECES = [
@@ -14,7 +16,7 @@ const PIECES = [
 ] as const;
 
 /** Ejemplo de outfit completo presentado como ficha editorial. */
-export function OutfitCard({ outfit }: OutfitCardProps) {
+export function OutfitCard({ outfit, verticalAdjustment }: OutfitCardProps) {
   return (
     <article className="flex flex-col rounded-card border border-line bg-surface p-6">
       <span className="w-fit rounded-full bg-brand-soft/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-brand-dark">
@@ -40,6 +42,13 @@ export function OutfitCard({ outfit }: OutfitCardProps) {
         <span className="font-semibold text-ink">Por qué funciona: </span>
         {outfit.why}
       </p>
+
+      {verticalAdjustment ? (
+        <p className="mt-2.5 rounded-xl bg-brand-soft/45 p-4 text-sm text-brand-dark">
+          <span className="font-semibold">Ajuste vertical: </span>
+          {verticalAdjustment}
+        </p>
+      ) : null}
     </article>
   );
 }

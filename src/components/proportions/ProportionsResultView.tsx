@@ -13,6 +13,7 @@ import {
 import { Accordion } from '@/components/ui/Accordion';
 import { buttonClasses } from '@/components/ui/Button';
 import { HeadRuler } from '@/components/proportions/HeadRuler';
+import { CombinedGuideSection } from '@/components/style-guide/CombinedGuideSection';
 import {
   SEGMENT_GUIDES,
   SEGMENT_SHORT_LABELS,
@@ -147,6 +148,9 @@ export function ProportionsResultView() {
           </div>
         ) : null}
       </section>
+
+      {/* Fórmula personal: cruce con el análisis de silueta */}
+      <CombinedGuideSection from="proportions" />
 
       <section
         aria-labelledby="acciones-rapidas"
