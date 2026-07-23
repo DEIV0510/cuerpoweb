@@ -3,12 +3,19 @@ import type {
   MeasurementSource,
   StoredAnalysis,
 } from '@/types/body-shape';
+import type { EightHeadsResult } from '@/lib/proportions/eight-heads';
 
 /** Clave única de esta aplicación en localStorage. */
 export const STORAGE_KEY = 'alma-silueta-corporal:last-analysis';
 
 /** Clave del progreso temporal del formulario. */
 export const DRAFT_KEY = 'alma-silueta-corporal:draft';
+
+/** Clave del análisis de proporción vertical (técnica de las 8 cabezas). */
+export const PROPORTIONS_KEY = 'alma-silueta-corporal:proportions';
+
+/** Clave del progreso temporal del análisis de proporciones. */
+export const PROPORTIONS_DRAFT_KEY = 'alma-silueta-corporal:proportions-draft';
 
 /** Versión del formato guardado. Permite descartar datos antiguos. */
 export const STORAGE_VERSION = 1;
@@ -163,6 +170,158 @@ export function clearDraft(): void {
   } catch {
     // Nada que hacer.
   }
+}
+
+/* ------------------------------------------------------------------
+   Proporción vertical · técnica de las 8 cabezas
+   ------------------------------------------------------------------ */
+
+/** Análisis de proporción vertical guardado en el dispositivo. */
+export interface StoredProportions {
+  storageVersion: number;
+  createdAt: string;
+  result: EightHeadsResult;
+}
+
+/** Progreso temporal del formulario de proporciones. */
+export interface ProportionsDraft {
+  step: number;
+  values: {
+    head: string;
+    torso: string;
+    rise: string;
+    legs: string;
+  };
+}
+
+function isStoredProportions(value: unknown): value is StoredProportions {
+  if (typeof value !== 'object' || value === null) return false;
+
+  const candidate = value as Partial<StoredProportions>;
+  if (candidate.storageVersion !== STORAGE_VERSION) return false;
+  if (typeof candidate.createdAt !== 'string') return false;
+
+  const result = candidate.result as Partial<EightHeadsResult> | undefined;
+  if (!result || typeof result !== 'object') return false;
+  if (typeof result.headCm !== 'number') return false;
+  if (typeof result.totalHeads !== 'number') return false;
+  if (!result.segments || typeof result.segments.torso?.heads !== 'number') return false;
+
+  return true;
+}
+
+function isProportionsDraft(value: unknown): value is ProportionsDraft {
+  if (typeof value !== 'object' || value === null) return false;
+
+  const candidate = value as Partial<ProportionsDraft>;
+  if (typeof candidate.step !== 'number') return false;
+  if (!candidate.values || typeof candidate.values !== 'object') return false;
+
+  const { head, torso, rise, legs } = candidate.values;
+  return [head, torso, rise, legs].every((item) => typeof item === 'string');
+}
+
+/** Guarda el análisis de proporción vertical. */
+export function saveProportions(
+  result: EightHeadsResult,
+  createdAt: string = new Date().toISOString(),
+): StoredProportions | null {
+  if (!isBrowser()) return null;
+
+  const payload: StoredProportions = {
+    storageVersion: STORAGE_VERSION,
+    createdAt,
+    result,
+  };
+
+  try {
+    window.localStorage.setItem(PROPORTIONS_KEY, JSON.stringify(payload));
+    notifyChange();
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
+/** Lee el texto crudo del análisis de proporciones. */
+export function readRawProportions(): string | null {
+  if (!isBrowser()) return null;
+
+  try {
+    return window.localStorage.getItem(PROPORTIONS_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/** Convierte el texto guardado en un análisis de proporciones válido. */
+export function parseProportions(raw: string | null): StoredProportions | null {
+  if (!raw) return null;
+
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return isStoredProportions(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Guarda el progreso del formulario de proporciones. */
+export function saveProportionsDraft(draft: ProportionsDraft): void {
+  if (!isBrowser()) return;
+
+  try {
+    window.localStorage.setItem(PROPORTIONS_DRAFT_KEY, JSON.stringify(draft));
+  } catch {
+    // Sin almacenamiento disponible: el formulario sigue funcionando.
+  }
+}
+
+/** Lee el texto crudo del borrador de proporciones. */
+export function readRawProportionsDraft(): string | null {
+  if (!isBrowser()) return null;
+
+  try {
+    return window.localStorage.getItem(PROPORTIONS_DRAFT_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/** Convierte el texto guardado en un borrador de proporciones válido. */
+export function parseProportionsDraft(raw: string | null): ProportionsDraft | null {
+  if (!raw) return null;
+
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return isProportionsDraft(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Elimina el análisis de proporciones y su borrador. */
+export function clearProportions(): boolean {
+  if (!isBrowser()) return false;
+
+  try {
+    const existed =
+      window.localStorage.getItem(PROPORTIONS_KEY) !== null ||
+      window.localStorage.getItem(PROPORTIONS_DRAFT_KEY) !== null;
+    window.localStorage.removeItem(PROPORTIONS_KEY);
+    window.localStorage.removeItem(PROPORTIONS_DRAFT_KEY);
+    notifyChange();
+    return existed;
+  } catch {
+    return false;
+  }
+}
+
+/** Elimina todo lo que la aplicación guarda en el dispositivo. */
+export function clearAllData(): boolean {
+  const hadAnalysis = clearAnalysis();
+  const hadProportions = clearProportions();
+  return hadAnalysis || hadProportions;
 }
 
 /**

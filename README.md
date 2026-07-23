@@ -4,6 +4,10 @@ Aplicación web que identifica la **silueta corporal predominante** a partir de 
 medidas (busto, cintura y cadera) y entrega una guía completa de vestuario:
 prendas, escotes, telas, estampados, accesorios y outfits completos.
 
+Incluye además la **técnica de las 8 cabezas**, que analiza la proporción
+vertical (torso, tiro y piernas) para saber qué tiro de pantalón, largo de
+chaqueta y altura de zapato acompañan mejor a cada persona.
+
 Está diseñada **mobile first**: es una aplicación para el teléfono que además se
 adapta a tablet y escritorio, no una página de escritorio reducida. Puede
 instalarse desde el navegador como PWA.
@@ -190,6 +194,48 @@ Requiere HTTPS, así que funciona en el dominio publicado (o en `localhost`).
 
 ---
 
+## Proporción vertical · técnica de las 8 cabezas
+
+Un segundo análisis, complementario al de la silueta, en `/proporciones`. La
+silueta compara **contornos** (horizontal); esta técnica compara **alturas**
+(vertical), que es lo que decide el tiro del pantalón, el largo de la chaqueta y
+la altura del zapato.
+
+**El canon**
+
+| Tramo | Referencia |
+| --- | --- |
+| Coronilla a quijada | 1 cabeza (es la unidad) |
+| Quijada a cintura | 2 cabezas |
+| Cintura a entrepierna | 1 cabeza |
+| Entrepierna a los pies | 4 cabezas |
+
+Cada tramo se divide entre la medida de la cabeza y se compara con su
+referencia. Un tramo está **en proporción** cuando la diferencia no supera
+`HEAD_TOLERANCE` = 0,25 cabezas (unos 5 cm en una persona de 1,62 m); por debajo
+es corto y por encima, largo.
+
+Comparando cuánto se aleja el torso de su referencia frente a cuánto se alejan
+las piernas de la suya (`resolveStrategy`), se obtiene la estrategia general:
+
+- **Subir la línea de la cintura** — tiro alto, blusa por dentro, chaqueta corta,
+  zapato en continuidad con el pantalón.
+- **Alargar la línea del torso** — blusa por fuera, escote en V, cárdigan largo,
+  tiro medio.
+- **Equilibrio** — libertad para elegir por gusto.
+
+Como todo se mide en cabezas, el resultado **no depende de la estatura**: dos
+personas de distinta altura con la misma proporción obtienen la misma guía.
+
+Las ocho cabezas son un canon del dibujo de figurín, no una norma de belleza:
+casi ninguna persona real mide exactamente ocho, y el dato útil es el reparto
+entre tramos, no el total.
+
+La lógica vive en `src/lib/proportions/eight-heads.ts` con 28 pruebas
+unitarias.
+
+---
+
 ## Estimación con foto (opcional)
 
 Además de escribir las medidas, la aplicación permite estimarlas desde una
@@ -348,6 +394,9 @@ src/
 │   ├── photo/
 │   │   ├── photo-estimation.ts       # Fotogrametría y modelo elíptico
 │   │   └── photo-estimation.test.ts  # Pruebas de la estimación
+│   ├── proportions/
+│   │   ├── eight-heads.ts            # Técnica de las 8 cabezas
+│   │   └── eight-heads.test.ts       # Pruebas de la proporción vertical
 │   ├── storage.ts              # localStorage (guardar, leer, borrar)
 │   ├── share.ts                # Web Share API con respaldo al portapapeles
 │   └── utils.ts
@@ -367,6 +416,8 @@ src/
 | `/como-medirse` | Guía visual completa para tomar cada medida |
 | `/analisis` | Flujo de cinco pasos a pantalla completa, con progreso guardado y aviso de valores poco habituales |
 | `/analisis/foto` | Estimación de las medidas marcando puntos sobre una foto, en seis pasos |
+| `/proporciones` | Técnica de las 8 cabezas: cuatro medidas verticales paso a paso |
+| `/proporciones/resultado` | Torso, tiro y piernas en cabezas, con sus recomendaciones |
 | `/resultado` | Silueta, explicación, comparación de medidas, reglas, recomendaciones y outfits |
 | `/metodologia` | Medidas usadas, orden de reglas, límites del método y versión del algoritmo |
 | `/privacidad` | Qué se guarda, dónde y botón para eliminar los datos locales |

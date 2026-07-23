@@ -3,17 +3,17 @@
 import { useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { clearAnalysis } from '@/lib/storage';
+import { clearAllData } from '@/lib/storage';
 
 /** Elimina el análisis guardado en el dispositivo. */
 export function DeleteLocalDataButton() {
   const [message, setMessage] = useState('');
 
   function handleDelete() {
-    const existed = clearAnalysis();
+    const existed = clearAllData();
     setMessage(
       existed
-        ? 'Listo: tu resultado guardado se eliminó de este dispositivo.'
+        ? 'Listo: tus resultados guardados se eliminaron de este dispositivo.'
         : 'No había ningún resultado guardado en este dispositivo.',
     );
   }

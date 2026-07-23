@@ -23,7 +23,17 @@ export const FAQS: Faq[] = [
   {
     question: '¿La altura cambia mi silueta?',
     answer:
-      'En esta versión no. La altura es un campo opcional que se guarda como referencia, pero la clasificación se basa únicamente en la relación entre busto, cintura y cadera.',
+      'En esta versión no. La altura es un campo opcional que se guarda como referencia, pero la clasificación se basa únicamente en la relación entre busto, cintura y cadera. Si quieres trabajar las alturas, ese es justo el objetivo de la técnica de las 8 cabezas.',
+  },
+  {
+    question: '¿Qué es la técnica de las 8 cabezas?',
+    answer:
+      'Es un segundo análisis, complementario al de la silueta. Divide el cuerpo verticalmente en unidades del tamaño de tu propia cabeza: lo proporcional son 2 cabezas de la quijada a la cintura, 1 de la cintura a la entrepierna y 4 de la entrepierna a los pies. Con eso sabes si tu torso es corto o largo y qué tiro de pantalón, largo de chaqueta y altura de zapato te acompañan mejor.',
+  },
+  {
+    question: '¿Tengo que medir 8 cabezas exactas?',
+    answer:
+      'No. Las ocho cabezas son un canon del dibujo de figurín, no una norma de belleza: casi ninguna persona real mide exactamente ocho. El dato útil no es el total, sino cómo se reparten tus tramos entre sí.',
   },
   {
     question: '¿Se guardan mis medidas en algún servidor?',

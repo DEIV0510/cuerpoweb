@@ -10,6 +10,7 @@ import { VisualObjectiveCard } from '@/components/results/VisualObjectiveCard';
 import { RecommendationAccordion } from '@/components/results/RecommendationAccordion';
 import { OutfitCard } from '@/components/results/OutfitCard';
 import { ResultActions } from '@/components/results/ResultActions';
+import { ProportionsTeaser } from '@/components/results/ProportionsTeaser';
 import { Accordion } from '@/components/ui/Accordion';
 import { buttonClasses } from '@/components/ui/Button';
 import { SITE } from '@/data/navigation';
@@ -119,6 +120,9 @@ export function ResultView() {
 
       {/* 4 · Objetivo visual */}
       <VisualObjectiveCard result={result} />
+
+      {/* Proporción vertical: el análisis complementario */}
+      <ProportionsTeaser />
 
       {/* 5 a 12 · Recomendaciones por categoría */}
       <div id="recomendaciones" className="scroll-mt-20 pt-2">

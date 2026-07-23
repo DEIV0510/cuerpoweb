@@ -18,6 +18,10 @@ import {
   DEPTH_RATIOS,
   PHOTO_ESTIMATION_VERSION,
 } from '@/lib/photo/photo-estimation';
+import {
+  EIGHT_HEADS_VERSION,
+  HEAD_TOLERANCE,
+} from '@/lib/proportions/eight-heads';
 
 export const metadata: Metadata = {
   title: 'Metodología',
@@ -251,6 +255,54 @@ export default function MetodologiaPage() {
               </li>
             ))}
           </ul>
+        </section>
+
+        <section
+          aria-labelledby="metodo-cabezas"
+          className="rounded-card border border-line bg-surface p-6 sm:p-8"
+        >
+          <h2 id="metodo-cabezas" className="text-2xl">
+            La técnica de las 8 cabezas
+          </h2>
+          <p className="mt-3 text-muted">
+            Es un análisis distinto y complementario: la silueta compara contornos
+            (horizontal) y esta técnica compara alturas (vertical). Viene del dibujo
+            de figurín, donde la figura ideal mide ocho veces su propia cabeza.
+          </p>
+
+          <ul className="mt-4 flex flex-col gap-2.5 text-[0.95rem] text-muted">
+            <li className="rounded-2xl bg-shell p-4">
+              <span className="font-semibold text-ink">1 cabeza · </span>
+              coronilla a quijada. Es la unidad de medida.
+            </li>
+            <li className="rounded-2xl bg-shell p-4">
+              <span className="font-semibold text-ink">2 cabezas · </span>
+              quijada a cintura. Menos de eso es torso corto; más, torso largo.
+            </li>
+            <li className="rounded-2xl bg-shell p-4">
+              <span className="font-semibold text-ink">1 cabeza · </span>
+              cintura a entrepierna. Define el tiro que te sienta.
+            </li>
+            <li className="rounded-2xl bg-shell p-4">
+              <span className="font-semibold text-ink">4 cabezas · </span>
+              entrepierna a los pies. Define el largo de tus piernas.
+            </li>
+          </ul>
+
+          <p className="mt-4 text-muted">
+            Cada tramo se divide entre tu medida de cabeza y se compara con su
+            referencia. Un tramo se considera en proporción cuando la diferencia no
+            supera <strong className="text-ink">{HEAD_TOLERANCE} cabezas</strong>,
+            que son unos 5 cm en una persona de 1,62 m. Comparando cuánto se aleja
+            el torso frente a cuánto se alejan las piernas se decide la estrategia:
+            subir la cintura, alargar el torso o mantener el equilibrio.
+          </p>
+
+          <p className="mt-3 text-sm text-faint">
+            Método de proporción vertical versión {EIGHT_HEADS_VERSION}. Las ocho
+            cabezas son un canon de dibujo, no una norma de belleza: casi ninguna
+            persona real mide exactamente ocho, y eso no tiene nada de malo.
+          </p>
         </section>
 
         <section

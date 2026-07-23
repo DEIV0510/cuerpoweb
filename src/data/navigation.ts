@@ -18,6 +18,7 @@ export const MAIN_NAV: NavLink[] = [
   { href: '/', label: 'Inicio' },
   { href: '/como-medirse', label: 'Cómo medirse' },
   { href: '/analisis', label: 'Analizar' },
+  { href: '/proporciones', label: '8 cabezas' },
   { href: '/metodologia', label: 'Metodología' },
   { href: '/privacidad', label: 'Privacidad' },
 ];
@@ -27,6 +28,7 @@ export const FOOTER_NAV: NavLink[] = [
   { href: '/como-medirse', label: 'Cómo medirse' },
   { href: '/analisis', label: 'Realizar el análisis' },
   { href: '/resultado', label: 'Mi resultado' },
+  { href: '/proporciones', label: 'Técnica de las 8 cabezas' },
   { href: '/metodologia', label: 'Metodología' },
   { href: '/privacidad', label: 'Privacidad y datos' },
 ];

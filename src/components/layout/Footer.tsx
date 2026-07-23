@@ -7,7 +7,7 @@ import { ALGORITHM_VERSION } from '@/lib/body-shape/classify-body-shape';
 
 /** Los flujos de análisis ocupan toda la pantalla y no llevan pie de página. */
 function isFlowRoute(pathname: string): boolean {
-  return pathname.startsWith('/analisis');
+  return pathname.startsWith('/analisis') || pathname === '/proporciones';
 }
 
 /** Pie de página compacto en móvil y en dos columnas desde tablet. */
