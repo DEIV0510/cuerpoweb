@@ -80,8 +80,9 @@ export default function PrivacidadPage() {
             Qué pasa con tus fotos
           </h2>
           <p className="mt-3 text-muted">
-            El análisis con foto usa una <strong className="text-ink">URL temporal
-            en memoria</strong> (<code className="rounded-md bg-shell px-2 py-0.5 text-sm">
+            Toda foto que subas —para estimar tus medidas o para combinar una
+            prenda— usa una <strong className="text-ink">URL temporal en memoria</strong>{' '}
+            (<code className="rounded-md bg-shell px-2 py-0.5 text-sm">
               URL.createObjectURL
             </code>
             ). La imagen nunca se envía por la red, nunca se escribe en el
@@ -89,8 +90,9 @@ export default function PrivacidadPage() {
             o cierras la aplicación.
           </p>
           <p className="mt-3 text-muted">
-            Del análisis solo quedan guardados los tres números que confirmaste, no
-            la fotografía ni las marcas que hiciste sobre ella.
+            Del análisis solo quedan guardados los datos que confirmaste (tus
+            medidas o tu perfil), nunca la fotografía ni las marcas que hiciste sobre
+            ella. Al combinar una prenda no se guarda nada.
           </p>
         </section>
 

@@ -14,7 +14,8 @@ function hasOwnHeader(pathname: string): boolean {
   return (
     pathname.startsWith('/analisis') ||
     pathname === '/proporciones' ||
-    pathname === '/armario'
+    pathname === '/armario' ||
+    pathname === '/armario/prenda'
   );
 }
 

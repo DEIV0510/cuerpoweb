@@ -2,7 +2,7 @@
 
 import { useMemo, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowRight, RotateCcw, Shirt, Sparkles, Wand2 } from 'lucide-react';
+import { ArrowRight, Camera, RotateCcw, Shirt, Sparkles, Wand2 } from 'lucide-react';
 import { Accordion } from '@/components/ui/Accordion';
 import { buttonClasses } from '@/components/ui/Button';
 import { BasicsChecklist } from '@/components/wardrobe/BasicsChecklist';
@@ -150,6 +150,32 @@ export function WardrobeResultView() {
             </li>
           ))}
         </ul>
+      </section>
+
+      {/* Combinar una prenda por foto */}
+      <section
+        aria-labelledby="combinar-prenda"
+        className="rounded-card border border-sand bg-brand-soft/45 p-5 sm:p-6"
+      >
+        <div className="flex items-center gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface">
+            <Camera aria-hidden="true" className="h-5 w-5 text-brand-dark" />
+          </span>
+          <h2 id="combinar-prenda" className="text-xl leading-tight">
+            ¿Tienes una prenda y no sabes con qué va?
+          </h2>
+        </div>
+        <p className="mt-3 text-[0.95rem] text-brand-dark">
+          Sube su foto, toma su color y te digo con qué colores y prendas
+          combinarla, según tu silueta y tu estilo.
+        </p>
+        <Link
+          href="/armario/prenda"
+          className={buttonClasses('primary', 'lg', 'no-print mt-4 w-full')}
+        >
+          Combinar una prenda
+          <ArrowRight aria-hidden="true" className="h-4 w-4" />
+        </Link>
       </section>
 
       {/* Checklist de básicos */}

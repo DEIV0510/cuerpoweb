@@ -219,9 +219,25 @@ silueta, el módulo enlaza con la fórmula personal.
 La lógica está en `src/lib/wardrobe/` (perfil + plan) con 26 pruebas unitarias;
 el contenido editable (básicos, cápsulas, preguntas) vive en `src/data/`.
 
-> Es el primer paso de una idea más amplia (subir una foto de una prenda para
-> generar combinaciones, cruzar con colorimetría, enlazar tiendas). Esas
-> ampliaciones necesitan decisiones aparte y no están en esta versión.
+### Combinar una prenda por foto
+
+Dentro del armario, en `/armario/prenda`, la persona sube la foto de una prenda,
+**toca su color sobre la imagen** y elige qué es. Con eso la app sugiere:
+
+- **Colores que combinan**: los neutros que siempre funcionan y unos acentos
+  curados según la familia de color de la prenda.
+- **Con qué prendas**: qué prenda inferior, chaqueta o calzado le van; si la
+  persona ya analizó su silueta, las sugerencias salen de las recomendaciones de
+  esa silueta.
+- **Ideas de look** y una nota según la silueta.
+
+No usa inteligencia artificial: el color se extrae de los píxeles de la foto (se
+convierte a HSL, se separa neutro de color por el croma y se clasifica en una
+familia). La foto se abre como URL temporal en memoria y se libera al salir; no
+se guarda nada. La lógica está en `src/lib/garment/` con 28 pruebas unitarias.
+
+> Siguen pendientes, porque necesitan decisiones aparte: fotos reales de prendas
+> (en vez de ilustraciones), cruzar con colorimetría y enlazar tiendas.
 
 ---
 
@@ -465,6 +481,10 @@ src/
 │   │   ├── style-profile.ts          # Perfil de estilo desde la encuesta
 │   │   ├── wardrobe-plan.ts          # Checklist de básicos y cápsulas
 │   │   └── wardrobe.test.ts          # Pruebas del módulo Mi Armario
+│   ├── garment/
+│   │   ├── color.ts                  # Color de una prenda por píxeles
+│   │   ├── combine.ts                # Sugerencias de combinación
+│   │   └── garment.test.ts           # Pruebas de combinar prenda
 │   ├── storage.ts              # localStorage (guardar, leer, borrar)
 │   ├── share.ts                # Web Share API con respaldo al portapapeles
 │   └── utils.ts
@@ -488,6 +508,7 @@ src/
 | `/proporciones/resultado` | Torso, tiro y piernas en cabezas, con sus recomendaciones |
 | `/armario` | Encuesta de estilo de seis preguntas |
 | `/armario/resultado` | Perfil de estilo, checklist de básicos y cápsulas de outfits |
+| `/armario/prenda` | Sube una prenda, toma su color y ve con qué combinarla |
 | `/resultado` | Silueta, explicación, comparación de medidas, reglas, recomendaciones y outfits |
 | `/metodologia` | Medidas usadas, orden de reglas, límites del método y versión del algoritmo |
 | `/privacidad` | Qué se guarda, dónde y botón para eliminar los datos locales |
