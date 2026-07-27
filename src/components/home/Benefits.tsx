@@ -3,8 +3,8 @@
   HeartHandshake,
   Layers,
   Printer,
+  Ruler,
   Shirt,
-  Timer,
 } from 'lucide-react';
 import { SectionHeading } from '@/components/ui/Card';
 
@@ -17,21 +17,21 @@ const BENEFITS = [
   },
   {
     icon: Shirt,
-    title: 'Guía por categoría',
+    title: 'Qué cortes te acompañan',
     description:
-      'Prendas superiores, pantalones, faldas, vestidos, chaquetas, telas, estampados y accesorios.',
+      'Prendas superiores, pantalones, faldas, vestidos, chaquetas, escotes, telas y accesorios para tu silueta.',
+  },
+  {
+    icon: Ruler,
+    title: 'La altura correcta',
+    description:
+      'La proporción vertical te dice el tiro del pantalón, el largo de la chaqueta y la altura del zapato que te estilizan.',
   },
   {
     icon: Layers,
-    title: 'Outfits completos',
+    title: 'Tu armario resuelto',
     description:
-      'Tres combinaciones listas para usar: casual, profesional y para un evento especial.',
-  },
-  {
-    icon: Timer,
-    title: 'Resultado inmediato',
-    description:
-      'El cálculo ocurre en tu navegador, sin esperas ni procesos externos.',
+      'Tu perfil de estilo, un checklist de básicos y cápsulas de outfits ya combinadas.',
   },
   {
     icon: Printer,
@@ -53,7 +53,7 @@ export function Benefits() {
     <section className="app-shell app-shell-wide px-gutter py-12 sm:py-16">
       <SectionHeading
         eyebrow="Para qué sirve"
-        title="Lo que te llevas del análisis"
+        title="Lo que te llevas de tu estudio de imagen"
       />
 
       <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

@@ -6,6 +6,16 @@ export interface Faq {
 /** Preguntas frecuentes que se muestran en la página de inicio. */
 export const FAQS: Faq[] = [
   {
+    question: '¿Tengo que hacer las tres herramientas?',
+    answer:
+      'No. Puedes usar solo la que te interese: la silueta, la técnica de las 8 cabezas o el armario. Cada una funciona por su cuenta, pero cuando combinas la silueta con las proporciones se crea tu fórmula personal, que es donde más brillan.',
+  },
+  {
+    question: '¿Qué es la fórmula personal?',
+    answer:
+      'Es el cruce entre tu silueta (qué cortes te acompañan) y tu proporción vertical (a qué altura llevarlos). Cuando completas los dos análisis, aparece en tu resultado con seis decisiones concretas: tiro del pantalón, blusa por dentro o por fuera, largo de chaqueta, altura de zapato, escote y punto focal.',
+  },
+  {
     question: '¿Necesito una cinta métrica especial?',
     answer:
       'No. Basta con una cinta métrica flexible de costura. Si no tienes una, puedes usar una cuerda o un cordón, marcar el punto donde se cierra y luego medir esa longitud con una regla o un metro rígido.',

@@ -1,17 +1,23 @@
 import Link from 'next/link';
-import { ArrowRight, Ruler, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, LayoutGrid, Ruler, ShieldCheck, Shirt, Sparkles } from 'lucide-react';
 import { buttonClasses } from '@/components/ui/Button';
 import { SilhouetteIllustration } from '@/components/ui/SilhouetteIllustration';
 import { BODY_SHAPE_PROFILES } from '@/data/body-shapes';
-import { SITE } from '@/data/navigation';
 
 const HIGHLIGHTS = [
-  { icon: Ruler, text: 'Solo tres medidas' },
+  { icon: LayoutGrid, text: 'Tres herramientas en una' },
   { icon: Sparkles, text: 'Resultado inmediato' },
   { icon: ShieldCheck, text: 'Sin registro ni servidores' },
 ];
 
-/** Primera pantalla de la página de inicio. */
+/** Los tres emblemas de la suite en la tarjeta del hero. */
+const TILES = [
+  { kind: 'silhouette' as const, label: 'Silueta' },
+  { kind: 'ruler' as const, label: '8 cabezas' },
+  { kind: 'shirt' as const, label: 'Mi armario' },
+];
+
+/** Primera pantalla de la página de inicio: presenta la suite completa. */
 export function HeroSection() {
   return (
     <section className="bg-blush-radial relative overflow-hidden border-b border-line">
@@ -28,30 +34,32 @@ export function HeroSection() {
         <div className="alma-fade-up flex flex-col gap-5">
           <span className="inline-flex w-fit items-center gap-2 rounded-full border border-sand bg-surface/70 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-dark backdrop-blur">
             <Sparkles aria-hidden="true" className="h-3.5 w-3.5" />
-            {SITE.brand} · {SITE.product}
+            Alma e Imagen · Estudio de imagen personal
           </span>
 
           <h1 className="text-[2rem] leading-[1.1] sm:text-[2.8rem] lg:text-[3.4rem]">
-            Descubre las prendas que{' '}
-            <span className="gradient-text italic">mejor acompañan</span> tu silueta
+            Aprende qué te favorece:{' '}
+            <span className="gradient-text italic">
+              tu silueta, tus proporciones y tu armario
+            </span>
           </h1>
 
           <p className="max-w-xl leading-relaxed text-muted sm:text-lg">
-            Ingresa tres medidas y recibe una guía personalizada de cortes, escotes,
-            prendas y detalles que ayudan a crear equilibrio visual y potenciar tu
-            estilo.
+            Tres herramientas que trabajan juntas y una fórmula personal que las
+            cruza para darte decisiones concretas de vestuario. Todo se calcula en
+            tu dispositivo, sin cuentas ni servidores.
           </p>
 
           <div className="flex flex-col gap-2.5 sm:flex-row">
             <Link href="/analisis" className={buttonClasses('primary', 'lg', 'w-full sm:w-auto')}>
-              Descubrir mi silueta
+              Empezar por mi silueta
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Link>
             <Link
-              href="/como-medirse"
+              href="#herramientas"
               className={buttonClasses('secondary', 'lg', 'w-full sm:w-auto')}
             >
-              Ver cómo medirme
+              Ver las tres herramientas
             </Link>
           </div>
 
@@ -74,30 +82,45 @@ export function HeroSection() {
 
             <div className="relative">
               <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-mocha">
-                Las cinco siluetas
+                La suite
               </span>
               <p className="font-script text-[2.8rem] leading-none text-brand-deep">
                 Alma e Imagen
               </p>
 
-              <div className="mt-7 grid grid-cols-5 items-end gap-2 sm:gap-3">
-                {Object.values(BODY_SHAPE_PROFILES).map((profile) => (
-                  <figure key={profile.id} className="flex flex-col items-center gap-2">
-                    <SilhouetteIllustration
-                      proportions={profile.illustration}
-                      title={`Silueta ${profile.name}`}
-                      className="max-h-32"
-                    />
-                    <figcaption className="text-center text-[0.62rem] leading-tight text-mocha">
-                      {profile.shortName}
+              <div className="mt-7 grid grid-cols-3 gap-3">
+                {TILES.map((tile) => (
+                  <figure
+                    key={tile.label}
+                    className="flex flex-col items-center gap-2 rounded-2xl bg-white/60 px-2 py-4"
+                  >
+                    <span className="flex h-14 items-center justify-center">
+                      {tile.kind === 'silhouette' ? (
+                        <SilhouetteIllustration
+                          proportions={BODY_SHAPE_PROFILES.hourglass.illustration}
+                          title="Silueta"
+                          className="max-h-14"
+                        />
+                      ) : tile.kind === 'ruler' ? (
+                        <Ruler aria-hidden="true" className="h-8 w-8 text-brand" />
+                      ) : (
+                        <Shirt aria-hidden="true" className="h-8 w-8 text-brand" />
+                      )}
+                    </span>
+                    <figcaption className="text-center text-[0.62rem] font-medium leading-tight text-mocha">
+                      {tile.label}
                     </figcaption>
                   </figure>
                 ))}
               </div>
 
-              <p className="mt-6 border-t border-white/60 pt-4 text-sm text-muted">
-                Ninguna silueta es mejor que otra: cada una tiene sus propias
-                proporciones y su forma de brillar.
+              <p className="mt-4 text-center text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-brand-dark">
+                Tres herramientas, una fórmula
+              </p>
+
+              <p className="mt-4 border-t border-white/60 pt-4 text-sm text-muted">
+                Ninguna silueta es mejor que otra: aquí no se corrige nada, se
+                acompaña.
               </p>
             </div>
           </div>
