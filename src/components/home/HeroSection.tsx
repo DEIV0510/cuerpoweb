@@ -1,20 +1,29 @@
 import Link from 'next/link';
-import { ArrowRight, LayoutGrid, Ruler, ShieldCheck, Shirt, Sparkles } from 'lucide-react';
+import {
+  ArrowRight,
+  LayoutGrid,
+  Palette,
+  Ruler,
+  ShieldCheck,
+  Shirt,
+  Sparkles,
+} from 'lucide-react';
 import { buttonClasses } from '@/components/ui/Button';
 import { SilhouetteIllustration } from '@/components/ui/SilhouetteIllustration';
 import { BODY_SHAPE_PROFILES } from '@/data/body-shapes';
 
 const HIGHLIGHTS = [
-  { icon: LayoutGrid, text: 'Tres herramientas en una' },
+  { icon: LayoutGrid, text: 'Cuatro herramientas en una' },
   { icon: Sparkles, text: 'Resultado inmediato' },
   { icon: ShieldCheck, text: 'Sin registro ni servidores' },
 ];
 
-/** Los tres emblemas de la suite en la tarjeta del hero. */
+/** Los cuatro emblemas de la suite en la tarjeta del hero. */
 const TILES = [
   { kind: 'silhouette' as const, label: 'Silueta' },
   { kind: 'ruler' as const, label: '8 cabezas' },
-  { kind: 'shirt' as const, label: 'Mi armario' },
+  { kind: 'palette' as const, label: 'Colores' },
+  { kind: 'shirt' as const, label: 'Armario' },
 ];
 
 /** Primera pantalla de la página de inicio: presenta la suite completa. */
@@ -40,14 +49,14 @@ export function HeroSection() {
           <h1 className="text-[2rem] leading-[1.1] sm:text-[2.8rem] lg:text-[3.4rem]">
             Aprende qué te favorece:{' '}
             <span className="gradient-text italic">
-              tu silueta, tus proporciones y tu armario
+              tu silueta, tus proporciones, tus colores y tu armario
             </span>
           </h1>
 
           <p className="max-w-xl leading-relaxed text-muted sm:text-lg">
-            Tres herramientas que trabajan juntas y una fórmula personal que las
-            cruza para darte decisiones concretas de vestuario. Todo se calcula en
-            tu dispositivo, sin cuentas ni servidores.
+            Cuatro herramientas que trabajan juntas para darte decisiones concretas
+            de vestuario: qué cortes, a qué altura, en qué colores. Todo se calcula
+            en tu dispositivo, sin cuentas ni servidores.
           </p>
 
           <div className="flex flex-col gap-2.5 sm:flex-row">
@@ -88,7 +97,7 @@ export function HeroSection() {
                 Alma e Imagen
               </p>
 
-              <div className="mt-7 grid grid-cols-3 gap-3">
+              <div className="mt-7 grid grid-cols-2 gap-3">
                 {TILES.map((tile) => (
                   <figure
                     key={tile.label}
@@ -103,6 +112,8 @@ export function HeroSection() {
                         />
                       ) : tile.kind === 'ruler' ? (
                         <Ruler aria-hidden="true" className="h-8 w-8 text-brand" />
+                      ) : tile.kind === 'palette' ? (
+                        <Palette aria-hidden="true" className="h-8 w-8 text-brand" />
                       ) : (
                         <Shirt aria-hidden="true" className="h-8 w-8 text-brand" />
                       )}

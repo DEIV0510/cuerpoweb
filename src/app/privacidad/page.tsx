@@ -20,7 +20,8 @@ const POINTS = [
   'No se requiere crear una cuenta ni iniciar sesión.',
   'El último resultado puede guardarse localmente en tu dispositivo para que puedas volver a consultarlo.',
   'Puedes eliminar esos datos cuando quieras desde esta misma página.',
-  'Tu perfil de estilo y el checklist de tu armario también se guardan solo en tu dispositivo.',
+  'Tu perfil de estilo, tu colorimetría y el checklist de tu armario también se guardan solo en tu dispositivo.',
+  'La colorimetría se calcula con un cuestionario: no usa la cámara ni analiza fotos de tu cara.',
   'No se venden ni se comparten tus datos personales.',
 ];
 

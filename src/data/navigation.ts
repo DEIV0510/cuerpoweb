@@ -18,8 +18,8 @@ export const MAIN_NAV: NavLink[] = [
   { href: '/', label: 'Inicio' },
   { href: '/analisis', label: 'Silueta' },
   { href: '/proporciones', label: '8 cabezas' },
+  { href: '/colorimetria', label: 'Colores' },
   { href: '/armario', label: 'Mi armario' },
-  { href: '/metodologia', label: 'Metodología' },
   { href: '/privacidad', label: 'Privacidad' },
 ];
 
@@ -29,6 +29,7 @@ export const FOOTER_NAV: NavLink[] = [
   { href: '/analisis', label: 'Analizar mi silueta' },
   { href: '/resultado', label: 'Mi resultado' },
   { href: '/proporciones', label: 'Técnica de las 8 cabezas' },
+  { href: '/colorimetria', label: 'Colorimetría' },
   { href: '/armario', label: 'Mi armario' },
   { href: '/metodologia', label: 'Metodología' },
   { href: '/privacidad', label: 'Privacidad y datos' },

@@ -13,6 +13,12 @@ import { RECOMMENDATIONS } from '@/data/recommendations';
 import { getBodyShapeProfile } from '@/data/body-shapes';
 import { SHAPE_STYLE } from '@/data/combined-guide-content';
 import type { BodyShapeType } from '@/types/body-shape';
+import {
+  assessColorForSeason,
+  type ColorVerdict,
+  type Season,
+} from '@/lib/color-analysis/season';
+import { getSeasonProfile } from '@/data/color-seasons';
 
 /**
  * Sugiere con qué combinar una prenda a partir de su tipo y su color, y —si
@@ -35,6 +41,15 @@ export interface OutfitIdea {
   description: string;
 }
 
+/** Cómo le sienta el color de la prenda a la estación de la persona. */
+export interface SeasonMatch {
+  verdict: ColorVerdict;
+  season: Season;
+  seasonName: string;
+  title: string;
+  detail: string;
+}
+
 export interface GarmentCombination {
   color: ColorInfo;
   palette: {
@@ -45,6 +60,8 @@ export interface GarmentCombination {
   pairWith: PairSuggestion[];
   outfitIdeas: OutfitIdea[];
   shapeNote?: string;
+  /** Veredicto según la colorimetría, si la persona la calculó. */
+  seasonMatch?: SeasonMatch;
   version: string;
 }
 
@@ -53,6 +70,8 @@ export interface CombineInput {
   color: ColorInfo;
   /** Silueta de la persona, si ya la calculó. */
   shape?: BodyShapeType;
+  /** Estación de color de la persona, si ya la calculó. */
+  season?: Season;
 }
 
 /** Campos de recomendaciones de silueta que son listas de texto. */
@@ -127,9 +146,39 @@ function buildOutfitIdeas(
   return ideas;
 }
 
+/** Evalúa el color de la prenda respecto a la estación de la persona. */
+function buildSeasonMatch(color: ColorInfo, season: Season): SeasonMatch {
+  const verdict = assessColorForSeason(color.family, season);
+  const seasonName = getSeasonProfile(season).name;
+  const name = color.displayName.toLowerCase();
+
+  const copy: Record<ColorVerdict, { title: string; detail: string }> = {
+    favorece: {
+      title: 'Este color te favorece',
+      detail: `El ${name} entra en tu paleta de ${seasonName.toLowerCase()}: llévalo cerca del rostro con confianza.`,
+    },
+    neutral: {
+      title: 'Un color que puedes llevar',
+      detail: `El ${name} no es de tus más favorecedores ni de los que apagan; funciona sobre todo si el tono va con tu paleta de ${seasonName.toLowerCase()}.`,
+    },
+    cuidado: {
+      title: 'Llévalo con cuidado',
+      detail: `El ${name} tiende a apagar a tu estación (${seasonName.toLowerCase()}). Si te encanta, úsalo lejos del rostro —en la parte inferior o en accesorios— o busca un tono más acorde a tu paleta.`,
+    },
+  };
+
+  return {
+    verdict,
+    season,
+    seasonName,
+    title: copy[verdict].title,
+    detail: copy[verdict].detail,
+  };
+}
+
 /** Construye la guía de combinación de una prenda. */
 export function buildCombination(input: CombineInput): GarmentCombination {
-  const { kind, color, shape } = input;
+  const { kind, color, shape, season } = input;
 
   const accentWith = ACCENT_SWATCHES[color.family];
 
@@ -149,6 +198,7 @@ export function buildCombination(input: CombineInput): GarmentCombination {
     pairWith,
     outfitIdeas: buildOutfitIdeas(kind, color, accentWith[0]),
     shapeNote: shape ? buildShapeNote(kind, shape) : undefined,
+    seasonMatch: season ? buildSeasonMatch(color, season) : undefined,
     version: COMBINE_VERSION,
   };
 }

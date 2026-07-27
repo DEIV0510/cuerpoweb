@@ -5,6 +5,7 @@ import { ToolsOverview } from '@/components/home/ToolsOverview';
 import { PersonalFormula } from '@/components/home/PersonalFormula';
 import { BodyShapePreview } from '@/components/home/BodyShapePreview';
 import { EightHeadsSection } from '@/components/home/EightHeadsSection';
+import { ColorimetrySection } from '@/components/home/ColorimetrySection';
 import { WardrobeSection } from '@/components/home/WardrobeSection';
 import { Benefits } from '@/components/home/Benefits';
 import { Faq } from '@/components/ui/Faq';
@@ -28,6 +29,7 @@ export default function HomePage() {
       {/* Detalle de cada herramienta, en orden de prioridad */}
       <BodyShapePreview />
       <EightHeadsSection />
+      <ColorimetrySection />
       <WardrobeSection />
 
       {/* Apoyo: valor, confianza y dudas */}

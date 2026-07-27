@@ -1,8 +1,10 @@
 import Link from 'next/link';
-import { Palette, Shirt, Sparkles, Target } from 'lucide-react';
+import { Check, Minus, Palette, Shirt, Sparkles, Target, TriangleAlert } from 'lucide-react';
 import { buttonClasses } from '@/components/ui/Button';
 import type { ColorSwatch } from '@/lib/garment/color';
 import type { GarmentCombination } from '@/lib/garment/combine';
+import type { ColorVerdict } from '@/lib/color-analysis/season';
+import { cn } from '@/lib/utils';
 
 interface CombinationResultProps {
   combination: GarmentCombination;
@@ -32,12 +34,40 @@ function Swatches({ items }: { items: ColorSwatch[] }) {
 }
 
 /** Muestra la guía de combinación de la prenda subida. */
+const VERDICT_STYLE: Record<
+  ColorVerdict,
+  { icon: typeof Check; border: string; bg: string; text: string; iconColor: string }
+> = {
+  favorece: {
+    icon: Check,
+    border: 'border-success/40',
+    bg: 'bg-success/10',
+    text: 'text-success',
+    iconColor: 'text-success',
+  },
+  neutral: {
+    icon: Minus,
+    border: 'border-line',
+    bg: 'bg-surface',
+    text: 'text-ink',
+    iconColor: 'text-muted',
+  },
+  cuidado: {
+    icon: TriangleAlert,
+    border: 'border-sand',
+    bg: 'bg-brand-soft/45',
+    text: 'text-brand-dark',
+    iconColor: 'text-brand-dark',
+  },
+};
+
 export function CombinationResult({
   combination,
   photoUrl,
   shapeName,
 }: CombinationResultProps) {
-  const { color, palette, pairWith, outfitIdeas, shapeNote } = combination;
+  const { color, palette, pairWith, outfitIdeas, shapeNote, seasonMatch } = combination;
+  const verdictStyle = seasonMatch ? VERDICT_STYLE[seasonMatch.verdict] : null;
 
   return (
     <section aria-labelledby="prenda-resultado" className="alma-fade-up flex flex-col gap-5">
@@ -75,6 +105,45 @@ export function CombinationResult({
           </div>
         </div>
       </div>
+
+      {/* Veredicto según la colorimetría */}
+      {seasonMatch && verdictStyle ? (
+        <section
+          aria-labelledby="veredicto-color"
+          className={cn('rounded-card border p-5', verdictStyle.border, verdictStyle.bg)}
+        >
+          <div className="flex items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface">
+              <verdictStyle.icon
+                aria-hidden="true"
+                className={cn('h-5 w-5', verdictStyle.iconColor)}
+              />
+            </span>
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand">
+                Tu colorimetría · {seasonMatch.seasonName}
+              </p>
+              <h2 id="veredicto-color" className={cn('text-xl leading-tight', verdictStyle.text)}>
+                {seasonMatch.title}
+              </h2>
+              <p className="mt-1.5 text-[0.95rem] text-muted">{seasonMatch.detail}</p>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="rounded-card border border-line bg-surface p-5">
+          <p className="text-[0.95rem] text-muted">
+            Si haces tu colorimetría, además te diré si este color entra en tu
+            paleta y te favorece.
+          </p>
+          <Link
+            href="/colorimetria"
+            className={buttonClasses('secondary', 'md', 'mt-3 w-full')}
+          >
+            Descubrir mis colores
+          </Link>
+        </section>
+      )}
 
       {/* Colores que combinan */}
       <section

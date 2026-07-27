@@ -1,9 +1,11 @@
 import Link from 'next/link';
-import { Ruler, Shirt } from 'lucide-react';
+import { Palette, Ruler, Shirt } from 'lucide-react';
 import { buttonClasses, type ButtonVariant } from '@/components/ui/Button';
 import { SectionHeading } from '@/components/ui/Card';
 import { SilhouetteIllustration } from '@/components/ui/SilhouetteIllustration';
 import { BODY_SHAPE_PROFILES } from '@/data/body-shapes';
+
+type ToolIconKind = 'silhouette' | 'ruler' | 'palette' | 'shirt';
 
 interface Tool {
   eyebrow: string;
@@ -12,6 +14,7 @@ interface Tool {
   href: string;
   cta: string;
   variant: ButtonVariant;
+  icon: ToolIconKind;
   badge?: string;
 }
 
@@ -24,6 +27,7 @@ const TOOLS: Tool[] = [
     href: '/analisis',
     cta: 'Descubrir mi silueta',
     variant: 'primary',
+    icon: 'silhouette',
     badge: 'Empieza aquí',
   },
   {
@@ -34,21 +38,33 @@ const TOOLS: Tool[] = [
     href: '/proporciones',
     cta: 'Medir mi proporción',
     variant: 'secondary',
+    icon: 'ruler',
   },
   {
     eyebrow: 'Herramienta 3',
+    title: 'Tus colores',
+    description:
+      'Tu colorimetría te dice tu estación y la paleta de colores que te iluminan, y evalúa las prendas que subes.',
+    href: '/colorimetria',
+    cta: 'Descubrir mis colores',
+    variant: 'secondary',
+    icon: 'palette',
+  },
+  {
+    eyebrow: 'Herramienta 4',
     title: 'Tu armario',
     description:
       'Una encuesta de estilo te da tu perfil, un checklist de básicos y cápsulas de outfits ya resueltas.',
     href: '/armario',
     cta: 'Crear mi armario',
     variant: 'secondary',
+    icon: 'shirt',
   },
 ];
 
-/** Mini ilustración de la silueta para la primera tarjeta. */
-function ToolIcon({ index }: { index: number }) {
-  if (index === 0) {
+/** Ícono de cada herramienta. */
+function ToolIcon({ icon }: { icon: ToolIconKind }) {
+  if (icon === 'silhouette') {
     return (
       <SilhouetteIllustration
         proportions={BODY_SHAPE_PROFILES.hourglass.illustration}
@@ -57,7 +73,7 @@ function ToolIcon({ index }: { index: number }) {
       />
     );
   }
-  const Icon = index === 1 ? Ruler : Shirt;
+  const Icon = icon === 'ruler' ? Ruler : icon === 'palette' ? Palette : Shirt;
   return <Icon aria-hidden="true" className="h-5 w-5 text-brand-dark" />;
 }
 
@@ -73,19 +89,19 @@ export function ToolsOverview() {
     >
       <SectionHeading
         eyebrow="La suite"
-        title="Tres herramientas que trabajan juntas"
-        description="Cada una resuelve una parte de tu imagen y se cruzan en una sola fórmula personal. Empieza por la que quieras: la silueta es la puerta de entrada recomendada."
+        title="Cuatro herramientas que trabajan juntas"
+        description="Cada una resuelve una parte de tu imagen y se cruzan entre sí. Empieza por la que quieras: la silueta es la puerta de entrada recomendada."
       />
 
-      <ul className="mt-8 grid gap-4 md:grid-cols-3">
-        {TOOLS.map((tool, index) => (
+      <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {TOOLS.map((tool) => (
           <li
             key={tool.href}
             className="flex flex-col rounded-card border border-line bg-surface p-6"
           >
             <div className="flex items-center gap-3">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-soft">
-                <ToolIcon index={index} />
+                <ToolIcon icon={tool.icon} />
               </span>
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand">

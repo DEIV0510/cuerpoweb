@@ -306,6 +306,47 @@ export default function MetodologiaPage() {
         </section>
 
         <section
+          aria-labelledby="metodo-color"
+          className="rounded-card border border-line bg-surface p-6 sm:p-8"
+        >
+          <h2 id="metodo-color" className="text-2xl">
+            La colorimetría
+          </h2>
+          <p className="mt-3 text-muted">
+            Es un cuestionario guiado, no un análisis de fotografía. A partir de
+            tus respuestas se deducen tres ejes y de ahí la estación de color:
+          </p>
+          <ul className="mt-4 flex flex-col gap-2.5 text-[0.95rem] text-muted">
+            <li className="rounded-2xl bg-shell p-4">
+              <span className="font-semibold text-ink">Subtono (cálido o frío): </span>
+              del color de tus venas, si te ilumina el oro o la plata, cómo
+              reacciona tu piel al sol y qué blanco te sienta.
+            </li>
+            <li className="rounded-2xl bg-shell p-4">
+              <span className="font-semibold text-ink">Profundidad (clara o profunda): </span>
+              de tu cabello y tus ojos naturales.
+            </li>
+            <li className="rounded-2xl bg-shell p-4">
+              <span className="font-semibold text-ink">Croma (vivo o suave): </span>
+              de cómo te sientan los colores muy intensos.
+            </li>
+          </ul>
+          <p className="mt-4 text-muted">
+            Cálida y clara es <strong className="text-ink">primavera</strong>; fría y
+            clara, <strong className="text-ink">verano</strong>; cálida y profunda,{' '}
+            <strong className="text-ink">otoño</strong>; fría y profunda,{' '}
+            <strong className="text-ink">invierno</strong>. Cada estación trae su
+            paleta y, al subir una prenda, se compara la familia de color de la
+            prenda con esa paleta.
+          </p>
+          <p className="mt-3 rounded-2xl border border-sand bg-brand-soft/40 p-4 text-[0.95rem] text-brand-dark">
+            Es una orientación: la colorimetría no es una ciencia exacta y la luz,
+            el maquillaje y tu propia percepción también influyen. No usa la cámara
+            ni analiza fotos de tu rostro.
+          </p>
+        </section>
+
+        <section
           aria-labelledby="metodo-foto"
           className="rounded-card border border-line bg-surface p-6 sm:p-8"
         >

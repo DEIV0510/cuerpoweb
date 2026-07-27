@@ -76,9 +76,14 @@ export const FAQS: Faq[] = [
       'Es una encuesta corta de estilo que arma tu perfil, un checklist de los básicos que te faltan según tu estilo y tus ocasiones, y cápsulas de outfits ya combinadas. Se apoya en tu silueta si ya la calculaste, y todo se guarda solo en tu dispositivo.',
   },
   {
+    question: '¿Cómo se calcula mi colorimetría?',
+    answer:
+      'Con un cuestionario guiado: respondes sobre el color de tus venas, si te ilumina más el oro o la plata, tu cabello y ojos naturales, y unos detalles más. Con eso deducimos tu subtono, tu profundidad y tu estación (primavera, verano, otoño o invierno) con su paleta. No usa la cámara ni inteligencia artificial: es una orientación, así que la luz y tu percepción también cuentan.',
+  },
+  {
     question: '¿Puedo subir una prenda mía y ver con qué combina?',
     answer:
-      'Sí. Dentro de Mi armario puedes subir la foto de una prenda, tocar su color en la imagen y decir qué es. La app te sugiere colores que combinan, con qué prendas llevarla y algunas ideas de look, afinadas a tu silueta si la calculaste. No usa inteligencia artificial: el color se toma de los píxeles de la foto, que se queda en tu dispositivo y no se guarda.',
+      'Sí. Dentro de Mi armario puedes subir la foto de una prenda, tocar su color en la imagen y decir qué es. La app te sugiere colores que combinan, con qué prendas llevarla y algunas ideas de look, afinadas a tu silueta si la calculaste. Y si hiciste tu colorimetría, además te dice si ese color entra en tu paleta. No usa inteligencia artificial: el color se toma de los píxeles de la foto, que se queda en tu dispositivo y no se guarda.',
   },
   {
     question: '¿Sirve para hombres?',

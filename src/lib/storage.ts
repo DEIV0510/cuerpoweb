@@ -5,6 +5,7 @@ import type {
 } from '@/types/body-shape';
 import type { EightHeadsResult } from '@/lib/proportions/eight-heads';
 import type { StyleProfile } from '@/lib/wardrobe/style-profile';
+import type { SeasonResult } from '@/lib/color-analysis/season';
 
 /** Clave única de esta aplicación en localStorage. */
 export const STORAGE_KEY = 'alma-silueta-corporal:last-analysis';
@@ -26,6 +27,12 @@ export const WARDROBE_DRAFT_KEY = 'alma-silueta-corporal:wardrobe-draft';
 
 /** Clave de los básicos que la persona marcó como que ya tiene. */
 export const WARDROBE_OWNED_KEY = 'alma-silueta-corporal:wardrobe-owned';
+
+/** Clave de la colorimetría (estación de color). */
+export const COLORIMETRY_KEY = 'alma-silueta-corporal:colorimetry';
+
+/** Clave del progreso temporal del cuestionario de colorimetría. */
+export const COLORIMETRY_DRAFT_KEY = 'alma-silueta-corporal:colorimetry-draft';
 
 /** Versión del formato guardado. Permite descartar datos antiguos. */
 export const STORAGE_VERSION = 1;
@@ -489,12 +496,129 @@ export function clearWardrobe(): boolean {
   }
 }
 
+/* ------------------------------------------------------------------
+   Colorimetría · estación de color
+   ------------------------------------------------------------------ */
+
+/** Colorimetría guardada en el dispositivo. */
+export interface StoredColorimetry {
+  storageVersion: number;
+  createdAt: string;
+  result: SeasonResult;
+}
+
+/** Progreso temporal del cuestionario de colorimetría. */
+export interface ColorimetryDraft {
+  step: number;
+  answers: Record<string, unknown>;
+}
+
+function isStoredColorimetry(value: unknown): value is StoredColorimetry {
+  if (typeof value !== 'object' || value === null) return false;
+  const candidate = value as Partial<StoredColorimetry>;
+  if (candidate.storageVersion !== STORAGE_VERSION) return false;
+  if (typeof candidate.createdAt !== 'string') return false;
+  const result = candidate.result as Partial<SeasonResult> | undefined;
+  return !!result && typeof result.season === 'string';
+}
+
+function isColorimetryDraft(value: unknown): value is ColorimetryDraft {
+  if (typeof value !== 'object' || value === null) return false;
+  const candidate = value as Partial<ColorimetryDraft>;
+  return typeof candidate.step === 'number' && typeof candidate.answers === 'object';
+}
+
+/** Guarda la colorimetría. */
+export function saveColorimetry(
+  result: SeasonResult,
+  createdAt: string = new Date().toISOString(),
+): StoredColorimetry | null {
+  if (!isBrowser()) return null;
+  const payload: StoredColorimetry = { storageVersion: STORAGE_VERSION, createdAt, result };
+  try {
+    window.localStorage.setItem(COLORIMETRY_KEY, JSON.stringify(payload));
+    notifyChange();
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
+/** Lee el texto crudo de la colorimetría. */
+export function readRawColorimetry(): string | null {
+  if (!isBrowser()) return null;
+  try {
+    return window.localStorage.getItem(COLORIMETRY_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/** Convierte el texto guardado en una colorimetría válida. */
+export function parseColorimetry(raw: string | null): StoredColorimetry | null {
+  if (!raw) return null;
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return isStoredColorimetry(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Guarda el progreso del cuestionario de colorimetría. */
+export function saveColorimetryDraft(draft: ColorimetryDraft): void {
+  if (!isBrowser()) return;
+  try {
+    window.localStorage.setItem(COLORIMETRY_DRAFT_KEY, JSON.stringify(draft));
+  } catch {
+    // Sin almacenamiento: el cuestionario sigue funcionando.
+  }
+}
+
+/** Lee el texto crudo del borrador de colorimetría. */
+export function readRawColorimetryDraft(): string | null {
+  if (!isBrowser()) return null;
+  try {
+    return window.localStorage.getItem(COLORIMETRY_DRAFT_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/** Convierte el texto guardado en un borrador de colorimetría válido. */
+export function parseColorimetryDraft(raw: string | null): ColorimetryDraft | null {
+  if (!raw) return null;
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return isColorimetryDraft(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Elimina la colorimetría y su borrador. */
+export function clearColorimetry(): boolean {
+  if (!isBrowser()) return false;
+  try {
+    const existed =
+      window.localStorage.getItem(COLORIMETRY_KEY) !== null ||
+      window.localStorage.getItem(COLORIMETRY_DRAFT_KEY) !== null;
+    window.localStorage.removeItem(COLORIMETRY_KEY);
+    window.localStorage.removeItem(COLORIMETRY_DRAFT_KEY);
+    notifyChange();
+    return existed;
+  } catch {
+    return false;
+  }
+}
+
 /** Elimina todo lo que la aplicación guarda en el dispositivo. */
 export function clearAllData(): boolean {
   const hadAnalysis = clearAnalysis();
   const hadProportions = clearProportions();
   const hadWardrobe = clearWardrobe();
-  return hadAnalysis || hadProportions || hadWardrobe;
+  const hadColorimetry = clearColorimetry();
+  return hadAnalysis || hadProportions || hadWardrobe || hadColorimetry;
 }
 
 /**

@@ -18,7 +18,13 @@ import {
 } from '@/lib/garment/color';
 import { buildCombination } from '@/lib/garment/combine';
 import { GARMENT_KINDS, type GarmentKind } from '@/data/garment-content';
-import { parseStoredAnalysis, readRawAnalysis, subscribeToAnalysis } from '@/lib/storage';
+import {
+  parseColorimetry,
+  parseStoredAnalysis,
+  readRawAnalysis,
+  readRawColorimetry,
+  subscribeToAnalysis,
+} from '@/lib/storage';
 import { getBodyShapeProfile } from '@/data/body-shapes';
 import { cn } from '@/lib/utils';
 
@@ -59,6 +65,17 @@ export function GarmentFlow() {
     if (rawShape === PENDING) return undefined;
     return parseStoredAnalysis(rawShape)?.result.type;
   }, [rawShape]);
+
+  // La colorimetría (si existe) dice si el color de la prenda le favorece.
+  const rawSeason = useSyncExternalStore(
+    subscribeToAnalysis,
+    readRawColorimetry,
+    getServerSnapshot,
+  );
+  const season = useMemo(() => {
+    if (rawSeason === PENDING) return undefined;
+    return parseColorimetry(rawSeason)?.result.season;
+  }, [rawSeason]);
 
   useEffect(() => {
     return () => {
@@ -146,7 +163,9 @@ export function GarmentFlow() {
   }
 
   const combination =
-    step === 3 && color && kind ? buildCombination({ kind, color, shape }) : null;
+    step === 3 && color && kind
+      ? buildCombination({ kind, color, shape, season })
+      : null;
 
   const primaryLabel =
     step === 0

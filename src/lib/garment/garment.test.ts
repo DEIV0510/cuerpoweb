@@ -215,6 +215,28 @@ describe('buildCombination', () => {
     expect(buildCombination(input)).toEqual(buildCombination(input));
   });
 
+  it('sin estación no incluye el veredicto de colorimetría', () => {
+    expect(buildCombination({ kind: 'top', color: pink }).seasonMatch).toBeUndefined();
+  });
+
+  it('con estación evalúa el color: el fucsia favorece a Invierno', () => {
+    const combo = buildCombination({ kind: 'top', color: pink, season: 'winter' });
+    expect(combo.seasonMatch?.verdict).toBe('favorece');
+    expect(combo.seasonMatch?.seasonName).toBe('Invierno');
+  });
+
+  it('el fucsia pide cuidado en Otoño', () => {
+    const combo = buildCombination({ kind: 'top', color: pink, season: 'autumn' });
+    expect(combo.seasonMatch?.verdict).toBe('cuidado');
+    expect(combo.seasonMatch?.detail.toLowerCase()).toContain('lejos del rostro');
+  });
+
+  it('el beige es neutro para Primavera', () => {
+    const combo = buildCombination({ kind: 'top', color: beige, season: 'spring' });
+    // El beige favorece a primavera en el mapa de familias.
+    expect(['favorece', 'neutral']).toContain(combo.seasonMatch?.verdict);
+  });
+
   it('produce combinación válida para las seis categorías', () => {
     for (const kind of ['top', 'bottom', 'dress', 'outerwear', 'shoes', 'accessory'] as const) {
       const combo = buildCombination({ kind, color: pink, shape: 'rectangle' });

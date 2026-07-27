@@ -219,6 +219,26 @@ silueta, el módulo enlaza con la fórmula personal.
 La lógica está en `src/lib/wardrobe/` (perfil + plan) con 26 pruebas unitarias;
 el contenido editable (básicos, cápsulas, preguntas) vive en `src/data/`.
 
+### Colorimetría (estación de color)
+
+En `/colorimetria`, un cuestionario guiado de siete preguntas (color de las
+venas, oro vs plata, reacción al sol, cabello y ojos naturales, blanco puro vs
+crema, cómo sientan los colores vivos) deduce:
+
+- **Subtono** (cálido / frío / neutro), **profundidad** (clara / profunda) y
+  **croma** (vivo / suave), combinados en una de las cuatro **estaciones**:
+  primavera, verano, otoño o invierno.
+- La **paleta** de colores que te iluminan, tus mejores **neutros** y el
+  **metal** (dorado / plateado) que te favorece.
+
+No usa la cámara ni inteligencia artificial: son reglas sobre respuestas, así
+que es una orientación. La lógica está en `src/lib/color-analysis/` con 24
+pruebas unitarias.
+
+Además, al combinar una prenda, si la persona ya hizo su colorimetría, la app
+**evalúa el color de la prenda contra su estación** (`favorece` / `neutral` /
+`cuidado`) y lo muestra destacado en el resultado.
+
 ### Combinar una prenda por foto
 
 Dentro del armario, en `/armario/prenda`, la persona sube la foto de una prenda,
@@ -485,6 +505,9 @@ src/
 │   │   ├── color.ts                  # Color de una prenda por píxeles
 │   │   ├── combine.ts                # Sugerencias de combinación
 │   │   └── garment.test.ts           # Pruebas de combinar prenda
+│   ├── color-analysis/
+│   │   ├── season.ts                 # Colorimetría (estación de color)
+│   │   └── season.test.ts            # Pruebas de colorimetría
 │   ├── storage.ts              # localStorage (guardar, leer, borrar)
 │   ├── share.ts                # Web Share API con respaldo al portapapeles
 │   └── utils.ts
@@ -509,6 +532,8 @@ src/
 | `/armario` | Encuesta de estilo de seis preguntas |
 | `/armario/resultado` | Perfil de estilo, checklist de básicos y cápsulas de outfits |
 | `/armario/prenda` | Sube una prenda, toma su color y ve con qué combinarla |
+| `/colorimetria` | Cuestionario de colorimetría de siete preguntas |
+| `/colorimetria/resultado` | Tu estación de color, tu paleta, neutros y metal |
 | `/resultado` | Silueta, explicación, comparación de medidas, reglas, recomendaciones y outfits |
 | `/metodologia` | Medidas usadas, orden de reglas, límites del método y versión del algoritmo |
 | `/privacidad` | Qué se guarda, dónde y botón para eliminar los datos locales |
