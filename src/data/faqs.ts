@@ -61,6 +61,11 @@ export const FAQS: Faq[] = [
       'Todas las veces que quieras. Cada nuevo análisis reemplaza al anterior en tu dispositivo, y siempre puedes volver a la guía de medición para revisar la técnica.',
   },
   {
+    question: '¿Qué es "Mi armario"?',
+    answer:
+      'Es una encuesta corta de estilo que arma tu perfil, un checklist de los básicos que te faltan según tu estilo y tus ocasiones, y cápsulas de outfits ya combinadas. Se apoya en tu silueta si ya la calculaste, y todo se guarda solo en tu dispositivo.',
+  },
+  {
     question: '¿Sirve para hombres?',
     answer:
       'Sí. El cálculo compara tres contornos y funciona para cualquier persona. Las recomendaciones están redactadas en términos de prendas y proporciones, así que puedes trasladarlas al tipo de vestuario que uses habitualmente.',

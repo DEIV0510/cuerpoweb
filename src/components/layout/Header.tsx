@@ -11,7 +11,11 @@ import { cn } from '@/lib/utils';
 
 /** Los flujos de análisis dibujan su propio encabezado con el paso actual. */
 function hasOwnHeader(pathname: string): boolean {
-  return pathname.startsWith('/analisis') || pathname === '/proporciones';
+  return (
+    pathname.startsWith('/analisis') ||
+    pathname === '/proporciones' ||
+    pathname === '/armario'
+  );
 }
 
 /** Encabezado móvil compacto: 56 px, wordmark y una sola acción a cada lado. */

@@ -20,7 +20,8 @@ const POINTS = [
   'No se requiere crear una cuenta ni iniciar sesión.',
   'El último resultado puede guardarse localmente en tu dispositivo para que puedas volver a consultarlo.',
   'Puedes eliminar esos datos cuando quieras desde esta misma página.',
-  'No se venden ni se comparten medidas personales.',
+  'Tu perfil de estilo y el checklist de tu armario también se guardan solo en tu dispositivo.',
+  'No se venden ni se comparten tus datos personales.',
 ];
 
 export default function PrivacidadPage() {

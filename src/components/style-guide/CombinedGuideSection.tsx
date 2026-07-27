@@ -45,6 +45,14 @@ export function CombinedGuideSection({ from }: CombinedGuideSectionProps) {
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </Link>
         ) : null}
+
+        <Link
+          href="/armario"
+          className={buttonClasses('ghost', 'md', 'no-print w-full')}
+        >
+          Llévalo a tu armario
+          <ArrowRight aria-hidden="true" className="h-4 w-4" />
+        </Link>
       </div>
     );
   }

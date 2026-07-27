@@ -198,6 +198,33 @@ Requiere HTTPS, así que funciona en el dominio publicado (o en `localhost`).
 
 ---
 
+## Mi armario (encuesta de estilo)
+
+Un módulo aparte, en `/armario`. Es una **encuesta** de seis preguntas (una por
+pantalla, como los demás flujos) que traduce el estilo y las ocasiones de la
+persona en tres cosas:
+
+1. **Perfil de estilo** con nombre propio (arquetipo × tono), p. ej. «Clásico
+   sereno» o «Ecléctico con carácter», y las prioridades por dónde empezar.
+2. **Checklist de básicos** filtrado por sus ocasiones y marcado con los
+   esenciales de su estilo. La persona marca lo que ya tiene y ve su progreso y
+   los esenciales que le faltan. El estado se guarda en el dispositivo.
+3. **Cápsulas de outfits** ya combinadas, seleccionadas por estilo, ocasión y
+   tono.
+
+Las prendas se muestran con **ilustraciones SVG propias** (componente
+`GarmentIcon`), sin depender de imágenes externas. Si la persona ya analizó su
+silueta, el módulo enlaza con la fórmula personal.
+
+La lógica está en `src/lib/wardrobe/` (perfil + plan) con 26 pruebas unitarias;
+el contenido editable (básicos, cápsulas, preguntas) vive en `src/data/`.
+
+> Es el primer paso de una idea más amplia (subir una foto de una prenda para
+> generar combinaciones, cruzar con colorimetría, enlazar tiendas). Esas
+> ampliaciones necesitan decisiones aparte y no están en esta versión.
+
+---
+
 ## La fórmula personal (guía combinada)
 
 Cuando los **dos análisis** están hechos, la aplicación los cruza en una sola
@@ -434,6 +461,10 @@ src/
 │   ├── style-guide/
 │   │   ├── combined-guide.ts         # Cruce silueta + proporción vertical
 │   │   └── combined-guide.test.ts    # Pruebas de la fórmula personal
+│   ├── wardrobe/
+│   │   ├── style-profile.ts          # Perfil de estilo desde la encuesta
+│   │   ├── wardrobe-plan.ts          # Checklist de básicos y cápsulas
+│   │   └── wardrobe.test.ts          # Pruebas del módulo Mi Armario
 │   ├── storage.ts              # localStorage (guardar, leer, borrar)
 │   ├── share.ts                # Web Share API con respaldo al portapapeles
 │   └── utils.ts
@@ -455,6 +486,8 @@ src/
 | `/analisis/foto` | Estimación de las medidas marcando puntos sobre una foto, en seis pasos |
 | `/proporciones` | Técnica de las 8 cabezas: cuatro medidas verticales paso a paso |
 | `/proporciones/resultado` | Torso, tiro y piernas en cabezas, con sus recomendaciones |
+| `/armario` | Encuesta de estilo de seis preguntas |
+| `/armario/resultado` | Perfil de estilo, checklist de básicos y cápsulas de outfits |
 | `/resultado` | Silueta, explicación, comparación de medidas, reglas, recomendaciones y outfits |
 | `/metodologia` | Medidas usadas, orden de reglas, límites del método y versión del algoritmo |
 | `/privacidad` | Qué se guarda, dónde y botón para eliminar los datos locales |

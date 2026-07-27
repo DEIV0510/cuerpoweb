@@ -4,6 +4,7 @@ import type {
   StoredAnalysis,
 } from '@/types/body-shape';
 import type { EightHeadsResult } from '@/lib/proportions/eight-heads';
+import type { StyleProfile } from '@/lib/wardrobe/style-profile';
 
 /** Clave única de esta aplicación en localStorage. */
 export const STORAGE_KEY = 'alma-silueta-corporal:last-analysis';
@@ -16,6 +17,15 @@ export const PROPORTIONS_KEY = 'alma-silueta-corporal:proportions';
 
 /** Clave del progreso temporal del análisis de proporciones. */
 export const PROPORTIONS_DRAFT_KEY = 'alma-silueta-corporal:proportions-draft';
+
+/** Clave del perfil de estilo (módulo Mi Armario). */
+export const WARDROBE_KEY = 'alma-silueta-corporal:wardrobe';
+
+/** Clave del progreso temporal de la encuesta de estilo. */
+export const WARDROBE_DRAFT_KEY = 'alma-silueta-corporal:wardrobe-draft';
+
+/** Clave de los básicos que la persona marcó como que ya tiene. */
+export const WARDROBE_OWNED_KEY = 'alma-silueta-corporal:wardrobe-owned';
 
 /** Versión del formato guardado. Permite descartar datos antiguos. */
 export const STORAGE_VERSION = 1;
@@ -317,11 +327,174 @@ export function clearProportions(): boolean {
   }
 }
 
+/* ------------------------------------------------------------------
+   Mi Armario · perfil de estilo, encuesta y básicos
+   ------------------------------------------------------------------ */
+
+/** Perfil de estilo guardado en el dispositivo. */
+export interface StoredWardrobe {
+  storageVersion: number;
+  createdAt: string;
+  profile: StyleProfile;
+}
+
+/** Progreso temporal de la encuesta de estilo. */
+export interface WardrobeDraft {
+  step: number;
+  answers: Record<string, unknown>;
+}
+
+function isStoredWardrobe(value: unknown): value is StoredWardrobe {
+  if (typeof value !== 'object' || value === null) return false;
+
+  const candidate = value as Partial<StoredWardrobe>;
+  if (candidate.storageVersion !== STORAGE_VERSION) return false;
+  if (typeof candidate.createdAt !== 'string') return false;
+
+  const profile = candidate.profile as Partial<StyleProfile> | undefined;
+  if (!profile || typeof profile !== 'object') return false;
+  if (typeof profile.archetype !== 'string') return false;
+  if (!Array.isArray(profile.occasions)) return false;
+
+  return true;
+}
+
+function isWardrobeDraft(value: unknown): value is WardrobeDraft {
+  if (typeof value !== 'object' || value === null) return false;
+  const candidate = value as Partial<WardrobeDraft>;
+  return typeof candidate.step === 'number' && typeof candidate.answers === 'object';
+}
+
+/** Guarda el perfil de estilo. */
+export function saveWardrobe(
+  profile: StyleProfile,
+  createdAt: string = new Date().toISOString(),
+): StoredWardrobe | null {
+  if (!isBrowser()) return null;
+
+  const payload: StoredWardrobe = {
+    storageVersion: STORAGE_VERSION,
+    createdAt,
+    profile,
+  };
+
+  try {
+    window.localStorage.setItem(WARDROBE_KEY, JSON.stringify(payload));
+    notifyChange();
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
+/** Lee el texto crudo del perfil de estilo. */
+export function readRawWardrobe(): string | null {
+  if (!isBrowser()) return null;
+
+  try {
+    return window.localStorage.getItem(WARDROBE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/** Convierte el texto guardado en un perfil de estilo válido. */
+export function parseWardrobe(raw: string | null): StoredWardrobe | null {
+  if (!raw) return null;
+
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return isStoredWardrobe(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Guarda el progreso de la encuesta de estilo. */
+export function saveWardrobeDraft(draft: WardrobeDraft): void {
+  if (!isBrowser()) return;
+
+  try {
+    window.localStorage.setItem(WARDROBE_DRAFT_KEY, JSON.stringify(draft));
+  } catch {
+    // Sin almacenamiento disponible: la encuesta sigue funcionando.
+  }
+}
+
+/** Lee el texto crudo del borrador de la encuesta. */
+export function readRawWardrobeDraft(): string | null {
+  if (!isBrowser()) return null;
+
+  try {
+    return window.localStorage.getItem(WARDROBE_DRAFT_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/** Convierte el texto guardado en un borrador de encuesta válido. */
+export function parseWardrobeDraft(raw: string | null): WardrobeDraft | null {
+  if (!raw) return null;
+
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return isWardrobeDraft(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Lee el conjunto de básicos que la persona marcó como que ya tiene. */
+export function readOwnedBasics(): string[] {
+  if (!isBrowser()) return [];
+
+  try {
+    const raw = window.localStorage.getItem(WARDROBE_OWNED_KEY);
+    if (!raw) return [];
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter((id) => typeof id === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Guarda el conjunto de básicos que la persona ya tiene. */
+export function saveOwnedBasics(ids: string[]): void {
+  if (!isBrowser()) return;
+
+  try {
+    window.localStorage.setItem(WARDROBE_OWNED_KEY, JSON.stringify(ids));
+    notifyChange();
+  } catch {
+    // Nada que hacer.
+  }
+}
+
+/** Elimina el perfil de estilo, su borrador y los básicos marcados. */
+export function clearWardrobe(): boolean {
+  if (!isBrowser()) return false;
+
+  try {
+    const existed =
+      window.localStorage.getItem(WARDROBE_KEY) !== null ||
+      window.localStorage.getItem(WARDROBE_DRAFT_KEY) !== null ||
+      window.localStorage.getItem(WARDROBE_OWNED_KEY) !== null;
+    window.localStorage.removeItem(WARDROBE_KEY);
+    window.localStorage.removeItem(WARDROBE_DRAFT_KEY);
+    window.localStorage.removeItem(WARDROBE_OWNED_KEY);
+    notifyChange();
+    return existed;
+  } catch {
+    return false;
+  }
+}
+
 /** Elimina todo lo que la aplicación guarda en el dispositivo. */
 export function clearAllData(): boolean {
   const hadAnalysis = clearAnalysis();
   const hadProportions = clearProportions();
-  return hadAnalysis || hadProportions;
+  const hadWardrobe = clearWardrobe();
+  return hadAnalysis || hadProportions || hadWardrobe;
 }
 
 /**

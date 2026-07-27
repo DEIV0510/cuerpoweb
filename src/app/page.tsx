@@ -6,6 +6,7 @@ import { StartOptions } from '@/components/home/StartOptions';
 import { BodyShapePreview } from '@/components/home/BodyShapePreview';
 import { Benefits } from '@/components/home/Benefits';
 import { EightHeadsSection } from '@/components/home/EightHeadsSection';
+import { WardrobeSection } from '@/components/home/WardrobeSection';
 import { Faq } from '@/components/ui/Faq';
 import { PrivacyNotice } from '@/components/ui/PrivacyNotice';
 import { buttonClasses } from '@/components/ui/Button';
@@ -20,6 +21,7 @@ export default function HomePage() {
       <StartOptions />
       <BodyShapePreview />
       <EightHeadsSection />
+      <WardrobeSection />
       <Benefits />
 
       <section className="app-shell app-shell-wide px-gutter pb-4">
